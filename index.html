@@ -73,7 +73,10 @@
     .welcome-card .rules li::before { content: "▸ "; color: #e94560; }
     .welcome-card .btn { max-width: 250px; margin: 0 auto; padding: 15px; font-size: 1.1rem; }
     .welcome-card.hidden { display: none; }
-    .install-banner { display: none; background: #0f3460; padding: 12px 20px; border-radius: 12px; margin-bottom: 15px; align-items: center; justify-content: space-between; }
+    .install-banner { display: none; background: #0f3460; padding: 12px 20px; border-radius: 12px; margin-bottom: 15px; align-items: center; justify-content: space-between; gap: 10px; }
+    .install-banner.show { display: flex; }
+    .install-banner p { font-size: 0.85rem; color: #ddd; flex: 1; }
+    .install-banner .btn { flex: 0; padding: 8px 20px; font-size: 0.85rem; white-space: nowrap; }
     .install-banner.show { display: flex; }
     .install-banner p { font-size: 0.9rem; }
     .install-banner .btn { flex: 0; padding: 8px 20px; font-size: 0.85rem; }
@@ -113,12 +116,11 @@
         <li>First Conditional (If... will)</li>
         <li>Going to vs Will</li>
       </div>
-      <button class="btn btn-success" id="startBtn">▶ ابدأ الاختبار</button>
-    </div>
-
-    <div class="install-banner" id="installBanner">
-      <p>📲 ثبّت التطبيق للاستخدام بدون إنترنت</p>
-      <button class="btn btn-success" id="installBtn">تثبيت</button>
+      <div class="install-banner" id="installBanner">
+        <p>📲 ثبّت التطبيق للاستخدام بدون إنترنت</p>
+        <button class="btn btn-success" id="installBtn">تثبيت</button>
+      </div>
+      <button class="btn btn-primary" id="startBtn">▶ ابدأ الاختبار</button>
     </div>
 
     <div class="quiz-content" id="quizContent">

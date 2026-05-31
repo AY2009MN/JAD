@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="تطبيق مسائل قواعد اللغة الإنجليزية - اختبر نفسك في قواعد اللغة الإنجليزية">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="English Grammar Quiz">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <title>English Grammar Quiz</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    body { background: #1a1a2e; color: #eee; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    .container { max-width: 700px; width: 100%; }
+    header { text-align: center; padding: 30px 0; }
+    header h1 { font-size: 1.8rem; color: #e94560; margin-bottom: 5px; }
+    header p { color: #aaa; font-size: 0.95rem; }
+    .stats { display: flex; justify-content: space-around; background: #16213e; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
+    .stat { text-align: center; }
+    .stat span { display: block; font-size: 1.5rem; font-weight: bold; color: #0f3460; }
+    .stat label { font-size: 0.8rem; color: #888; }
+    .stat.correct span { color: #2ecc71; }
+    .stat.wrong span { color: #e74c3c; }
+    .stat.total span { color: #f39c12; }
+    .card { background: #16213e; border-radius: 16px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .question-number { color: #e94560; font-size: 0.85rem; margin-bottom: 10px; }
+    .question-text { font-size: 1.2rem; margin-bottom: 20px; line-height: 1.6; color: #fff; }
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option { background: #1a1a2e; border: 2px solid #0f3460; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.2s; font-size: 1rem; text-align: start; color: #ddd; }
+    .option:hover { border-color: #e94560; background: #1f1f3a; }
+    .option.selected { border-color: #f39c12; background: #2a2a4a; }
+    .option.correct { border-color: #2ecc71; background: #1a3a2a; color: #2ecc71; }
+    .option.wrong { border-color: #e74c3c; background: #3a1a1a; color: #e74c3c; }
+    .option:disabled { cursor: not-allowed; opacity: 0.7; }
+    .feedback { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; }
+    .feedback.show { display: block; }
+    .feedback.correct { background: #1a3a2a; border: 1px solid #2ecc71; color: #2ecc71; }
+    .feedback.wrong { background: #3a1a1a; border: 1px solid #e74c3c; color: #e74c3c; }
+    .feedback h4 { margin-bottom: 5px; }
+    .feedback p { color: #ccc; font-size: 0.9rem; }
+    .btn-group { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .btn { padding: 12px 30px; border: none; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: 0.2s; flex: 1; min-width: 120px; font-weight: 600; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary { background: #e94560; color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #d63851; }
+    .btn-success { background: #2ecc71; color: #fff; }
+    .btn-success:hover:not(:disabled) { background: #27ae60; }
+    .btn-secondary { background: #0f3460; color: #fff; }
+    .btn-secondary:hover:not(:disabled) { background: #1a4a8a; }
+    .result-card { display: none; text-align: center; }
+    .result-card.show { display: block; }
+    .result-card .score { font-size: 4rem; font-weight: bold; color: #e94560; }
+    .result-card .score-label { color: #aaa; font-size: 1rem; }
+    .result-details { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+    .result-details div { text-align: center; }
+    .result-details span { display: block; font-size: 1.8rem; font-weight: bold; }
+    .result-details .r-correct { color: #2ecc71; }
+    .result-details .r-wrong { color: #e74c3c; }
+    .progress-bar { width: 100%; height: 4px; background: #0f3460; border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #e94560; transition: width 0.4s; border-radius: 2px; }
+    .install-banner { display: none; background: #0f3460; padding: 12px 20px; border-radius: 12px; margin-bottom: 15px; align-items: center; justify-content: space-between; }
+    .install-banner.show { display: flex; }
+    .install-banner p { font-size: 0.9rem; }
+    .install-banner .btn { flex: 0; padding: 8px 20px; font-size: 0.85rem; }
+    .quiz-area { display: block; }
+    .quiz-area.hidden { display: none; }
+    footer { text-align: center; padding: 20px; color: #555; font-size: 0.85rem; }
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      header h1 { font-size: 1.4rem; }
+      .card { padding: 18px; }
+      .question-text { font-size: 1.05rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📝 English Grammar Quiz</h1>
+      <p>اختبر نفسك: too/enough - Passive - Pronouns - Modals - Present Perfect - Future - Conditionals</p>
+    </header>
+
+    <div class="install-banner" id="installBanner">
+      <p>📲 ثبّت التطبيق للاستخدام بدون إنترنت</p>
+      <button class="btn btn-success" id="installBtn">تثبيت</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat correct">
+        <span id="correctCount">0</span>
+        <label>✅ صحيح</label>
+      </div>
+      <div class="stat wrong">
+        <span id="wrongCount">0</span>
+        <label>❌ خطأ</label>
+      </div>
+      <div class="stat total">
+        <span id="totalCount">0</span>
+        <label>📊 المجموع</label>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+
+    <div class="quiz-area" id="quizArea">
+      <div class="card" id="questionCard">
+        <div class="question-number" id="questionNumber">السؤال 1 من 30</div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedback">
+          <h4 id="feedbackTitle"></h4>
+          <p id="feedbackText"></p>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" id="nextBtn" disabled>التالي ←</button>
+          <button class="btn btn-secondary" id="restartBtn">ابدأ من جديد</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card result-card" id="resultCard">
+      <h2>🎉 النتيجة</h2>
+      <div class="score" id="finalScore">0%</div>
+      <div class="score-label" id="finalTotalLabel">من 45 سؤال</div>
+      <div class="result-details">
+        <div><span class="r-correct" id="finalCorrect">0</span><br>✅ صحيح</div>
+        <div><span class="r-wrong" id="finalWrong">0</span><br>❌ خطأ</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-success" id="playAgainBtn">🔄 إعادة الاختبار</button>
+      </div>
+    </div>
+
+    <footer>English Grammar Quiz &copy; 2026</footer>
+  </div>
+
+  <script>
+    const questions = [
+      // ===== 1. too / not ... enough =====
+      { q: 'These shoes are ___ small for me. I need a bigger size.', o: ['too', 'enough', 'very', 'so'], a: 0, e: 'نستخدم "too" قبل الصفة لتعني "أكثر من اللازم": too small = صغير جداً (أكثر من اللازم)' },
+      { q: 'He isn\'t tall ___ to reach the shelf.', o: ['too', 'enough', 'very', 'so'], a: 1, e: 'نستخدم "enough" بعد الصفة في الجمل المنفية: isn\'t tall enough = ليس طويلاً كفاية' },
+      { q: 'The coffee is ___ hot to drink right now.', o: ['too', 'enough', 'very', 'so'], a: 0, e: '"too + صفة + to" تعني "أكثر من اللازم لـ": too hot to drink = ساخن جداً بحيث لا يمكن شربه' },
+      { q: 'She is smart ___ to pass the exam easily.', o: ['too', 'enough', 'very', 'so'], a: 1, e: '"صفة + enough + to" تعني "كافٍ لـ": smart enough = ذكية كفاية' },
+      { q: 'The bag is ___ heavy for me to carry.', o: ['too', 'enough', 'very', 'so'], a: 0, e: '"too + صفة + for + اسم + to" تعني "أكثر من اللازم بالنسبة لـ": too heavy for me to carry = ثقيل جداً بحيث لا أستطيع حمله' },
+
+      // ===== 2. Present Passive (called, made of, used to, used for, worn by) =====
+      { q: 'This fabric ___ cotton.', o: ['is made of', 'made of', 'is making of', 'makes of'], a: 0, e: 'المبني للمجهول للمضارع: is/are + Past Participle. is made of = مصنوع من (مادة خام)' },
+      { q: 'A knife ___ cutting bread.', o: ['is used to', 'is used for', 'uses for', 'used for'], a: 1, e: '"is used for + verb-ing" = يُستخدم لـ (غرض). is used for cutting = يُستخدم لتقطيع' },
+      { q: 'A thermometer ___ temperature.', o: ['is used to measure', 'is used for measure', 'used to measure', 'uses to measure'], a: 0, e: '"is used to + infinitive" = يُستخدم لـ (فعل). is used to measure = يُستخدم لقياس' },
+      { q: 'This type of hat ___ by farmers.', o: ['is worn', 'worn', 'wears', 'is wearing'], a: 0, e: 'المبني للمجهول: is worn by = يُلبس بواسطة. الفاعل الحقيقي يأتي بعد "by"' },
+      { q: 'This plant ___ "Rose" in English.', o: ['is called', 'called', 'calls', 'is calling'], a: 0, e: '"is called" = يُسمى. في المضارع المبني للمجهول: is/are + Past Participle' },
+
+      // ===== 3. Indefinite Pronouns (someone, anywhere, nothing) =====
+      { q: 'There is ___ at the door. Can you check who it is?', o: ['someone', 'anyone', 'no one', 'anything'], a: 0, e: 'في الجمل المثبتة نستخدم "someone" = شخص ما. Someone يُستخدم في الإثبات [Affirmative]' },
+      { q: 'I don\'t have ___ to go tonight.', o: ['somewhere', 'anywhere', 'nowhere', 'everywhere'], a: 1, e: 'في الجمل المنفية نستخدم "anywhere" = أي مكان. anywhere مع النفي "not"' },
+      { q: 'There is ___ in the box. It\'s completely empty.', o: ['something', 'anything', 'nothing', 'everything'], a: 2, e: '"nothing" = لا شيء. تستخدم للإشارة إلى غياب تام للأشياء' },
+      { q: 'Did you see ___ at the party?', o: ['someone', 'anyone', 'no one', 'everyone'], a: 1, e: 'في الأسئلة نستخدم "anyone" = أي شخص. anyone يُستخدم في الأسئلة [Questions]' },
+      { q: 'I have ___ important to tell you.', o: ['something', 'anything', 'nothing', 'everything'], a: 0, e: '"something" = شيء ما. تُستخدم في الجمل المثبتة [Affirmative]' },
+
+      // ===== 4. Modals (should/shouldn't, must/mustn't, need to/don't need to) =====
+      { q: 'You ___ brush your teeth before bed.', o: ['should', 'shouldn\'t', 'mustn\'t', 'don\'t need to'], a: 0, e: '"should" = ينبغي / من المستحسن. تستخدم لتقديم نصيحة أو توصية' },
+      { q: 'You ___ touch the wet wire! It\'s dangerous.', o: ['should', 'shouldn\'t', 'mustn\'t', 'need to'], a: 2, e: '"mustn\'t" = ممنوع تماماً. تعبر عن منع قاطع (prohibition)' },
+      { q: 'You ___ wear a seatbelt when driving. It\'s the law.', o: ['should', 'must', 'don\'t need to', 'shouldn\'t'], a: 1, e: '"must" = يجب / إلزامي. تعبر عن ضرورة قوية أو قانون (obligation)' },
+      { q: 'We have plenty of time. You ___ hurry.', o: ['must', 'mustn\'t', 'don\'t need to', 'should'], a: 2, e: '"don\'t need to" = لا تحتاج / ليس من الضروري. تعبر عن عدم وجود ضرورة (lack of necessity)' },
+      { q: 'You ___ eat too much sugar. It\'s bad for your health.', o: ['should', 'shouldn\'t', 'must', 'need to'], a: 1, e: '"shouldn\'t" = لا ينبغي. تستخدم لنصيحة بعدم فعل شيء' },
+
+      // ===== 5. Present Perfect with since / for =====
+      { q: 'I have lived here ___ 2015.', o: ['since', 'for', 'from', 'in'], a: 0, e: '"since" + نقطة زمنية محددة (2015). since يُستخدم مع بداية الفترة الزمنية' },
+      { q: 'She has studied English ___ three years.', o: ['since', 'for', 'from', 'in'], a: 1, e: '"for" + مدة زمنية (three years). for يُستخدم مع طول المدة' },
+      { q: 'They have been married ___ last June.', o: ['since', 'for', 'from', 'ago'], a: 0, e: '"since" + شهر/يوم محدد (last June). since يسبق نقطة زمنية' },
+      { q: 'He has worked at this company ___ a decade.', o: ['since', 'for', 'from', 'in'], a: 1, e: '"for" + فترة زمنية (a decade = عقد). for يسبق مدة زمنية' },
+      { q: 'We haven\'t seen him ___ Monday.', o: ['since', 'for', 'from', 'ago'], a: 0, e: '"since" + يوم محدد (Monday). مع النفي في Present Perfect نستخدم since للإشارة إلى نقطة البداية' },
+
+      // ===== 6. Present Continuous for Future Arrangements =====
+      { q: 'I ___ my doctor tomorrow at 3 PM.', o: ['am seeing', 'see', 'will see', 'saw'], a: 0, e: 'المضارع المستمر (am seeing) يُستخدم للترتيبات المستقبلية المؤكدة مع وقت محدد' },
+      { q: 'We ___ a party next Saturday. All our friends are invited.', o: ['are having', 'have', 'will have', 'had'], a: 0, e: '"are having" = لدينا ترتيب. Present Continuous for future arrangements يعبر عن خطط مؤكدة' },
+      { q: 'She ___ to London next week. She already bought the ticket.', o: ['is flying', 'flies', 'will fly', 'flew'], a: 0, e: '"is flying" = مسافرة (ترتيب مؤكد). مع تذكرة مشتراة نستخدم المضارع المستمر للمستقبل' },
+      { q: 'They ___ married next month.', o: ['are getting', 'get', 'will get', 'got'], a: 0, e: '"are getting married" = سيتزوجان (ترتيب مستقبلي مؤكد). Present Continuous حضر موعد الزفاف' },
+      { q: 'I ___ out with my friends this evening. We booked a table.', o: ['am going', 'go', 'will go', 'went'], a: 0, e: '"am going out" = سأخرج (خطة مؤكدة). ترتيب مسبق مع حجز = Present Continuous for future' },
+
+      // ===== 7. May, Might, Could, Can't, Must + Present Simple =====
+      { q: 'It\'s cloudy. It ___ rain later today.', o: ['might', 'can\'t', 'must', 'will'], a: 0, e: '"might" = ربما / احتمال ضعيف (قد تمطر). might يعبر عن احتمال غير مؤكد (50% أو أقل)' },
+      { q: 'He ___ be at home. I saw his car in the garage.', o: ['may', 'might', 'must', 'can\'t'], a: 2, e: '"must" = لا بد أن (استنتاج منطقي قوي). must تعبر عن يقين بناء على دليل (السيارة في المرآب)' },
+      { q: 'She ___ be tired. She just woke up an hour ago.', o: ['may', 'might', 'could', 'can\'t'], a: 3, e: '"can\'t" = لا يمكن أن (استنتاج منفي قوي). can\'t تعبر عن استحالة بناء على دليل' },
+      { q: 'Where is my phone? It ___ be in the kitchen. I\'m not sure.', o: ['could', 'must', 'can\'t', 'will'], a: 0, e: '"could" = ربما / من الممكن (احتمال). could يعبر عن احتمال غير مؤكد (similar to might/may)' },
+      { q: 'They ___ arrive late. The traffic is terrible today.', o: ['may', 'must', 'can\'t', 'will'], a: 0, e: '"may" = ربما (احتمال). may يعبر عن احتمال (قد يصلون متأخرين بسبب الزحام)' },
+
+      // ===== 8. First Conditional: If..., will... =====
+      { q: 'If it rains, we ___ at home.', o: ['will stay', 'stay', 'would stay', 'stayed'], a: 0, e: 'First Conditional: If + Present Simple, will + infinitive. الشرط = rains, النتيجة = will stay' },
+      { q: 'If you study hard, you ___ the exam.', o: ['will pass', 'pass', 'would pass', 'passed'], a: 0, e: 'First Conditional: if + Present Simple => will + المصدر. study hard → will pass' },
+      { q: 'She ___ happy if she gets the job.', o: ['will be', 'is', 'would be', 'was'], a: 0, e: 'First Conditional: النتيجة تأتي مع will. gets (Present) → will be (Future result)' },
+      { q: 'If we don\'t hurry, we ___ the bus.', o: ['will miss', 'miss', 'would miss', 'missed'], a: 0, e: 'First Conditional مع النفي: If + don\'t + Present, will + infinitive. don\'t hurry → will miss' },
+      { q: 'What ___ you do if you lose your job?', o: ['will', 'would', 'do', 'did'], a: 0, e: 'First Conditional في السؤال: Wh-word + will + فاعل + فعل + if + Present Simple' },
+
+      // ===== 9. Future Plans: Going to and will =====
+      { q: 'I ___ buy a new car next month. I already saved the money.', o: ['am going to', 'will', 'am going', 'go to'], a: 0, e: '"am going to" = خطط مسبقة + قرارات مبنية على دليل. مناسب عندما يكون هناك تخطيط مسبق وادخار مال' },
+      { q: 'A: The phone is ringing. B: I ___ answer it.', o: ['will', 'am going to', 'am going', 'go to'], a: 0, e: '"will" = قرار لحظي (spontaneous decision). نستخدم will عندما نقرر شيئاً في نفس اللحظة' },
+      { q: 'Look at those dark clouds! It ___ rain.', o: ['is going to', 'will', 'rains', 'is raining'], a: 0, e: '"is going to" = توقع مبني على دليل واضح (الغيوم الداكنة). going to مع الأدلة المرئية' },
+      { q: 'She ___ be a doctor when she grows up. That\'s her dream.', o: ['is going to', 'will', 'goes to', 'was going to'], a: 0, e: '"is going to" = خطط وطموحات مستقبلية. going to تعبر عن نية مسبقة (حلمها أن تصبح طبيبة)' },
+      { q: 'I promise I ___ call you every day.', o: ['will', 'am going to', 'am going', 'go to'], a: 0, e: '"will" = وعود (promises). نستخدم will مع الوعود والعروض والقرارات الفورية' }
+    ];
+
+    let currentQuestion = 0;
+    let correctAnswers = 0;
+    let wrongAnswers = 0;
+    let answered = false;
+    let deferredPrompt = null;
+
+    const elements = {
+      questionNumber: document.getElementById('questionNumber'),
+      questionText: document.getElementById('questionText'),
+      optionsContainer: document.getElementById('optionsContainer'),
+      feedback: document.getElementById('feedback'),
+      feedbackTitle: document.getElementById('feedbackTitle'),
+      feedbackText: document.getElementById('feedbackText'),
+      nextBtn: document.getElementById('nextBtn'),
+      restartBtn: document.getElementById('restartBtn'),
+      correctCount: document.getElementById('correctCount'),
+      wrongCount: document.getElementById('wrongCount'),
+      totalCount: document.getElementById('totalCount'),
+      progressFill: document.getElementById('progressFill'),
+      quizArea: document.getElementById('quizArea'),
+      resultCard: document.getElementById('resultCard'),
+      finalScore: document.getElementById('finalScore'),
+      finalCorrect: document.getElementById('finalCorrect'),
+      finalWrong: document.getElementById('finalWrong'),
+      playAgainBtn: document.getElementById('playAgainBtn'),
+      installBanner: document.getElementById('installBanner'),
+      installBtn: document.getElementById('installBtn'),
+      finalTotalLabel: document.getElementById('finalTotalLabel')
+    };
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    let shuffledQuestions = shuffle([...questions]);
+
+    function loadQuestion() {
+      const q = shuffledQuestions[currentQuestion];
+      elements.questionNumber.textContent = `السؤال ${currentQuestion + 1} من ${shuffledQuestions.length}`;
+      elements.questionText.textContent = q.q;
+      elements.optionsContainer.innerHTML = '';
+      elements.feedback.classList.remove('show', 'correct', 'wrong');
+      elements.nextBtn.disabled = true;
+      answered = false;
+
+      q.o.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = opt;
+        btn.dataset.index = idx;
+        btn.addEventListener('click', () => selectOption(idx));
+        elements.optionsContainer.appendChild(btn);
+      });
+
+      elements.progressFill.style.width = `${((currentQuestion) / shuffledQuestions.length) * 100}%`;
+    }
+
+    function selectOption(idx) {
+      if (answered) return;
+      answered = true;
+      const q = shuffledQuestions[currentQuestion];
+      const options = elements.optionsContainer.querySelectorAll('.option');
+
+      options.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.a) btn.classList.add('correct');
+        if (i === idx && idx !== q.a) btn.classList.add('wrong');
+        if (i === idx) btn.classList.add('selected');
+      });
+
+      const isCorrect = idx === q.a;
+      if (isCorrect) {
+        correctAnswers++;
+        elements.feedback.className = 'feedback show correct';
+        elements.feedbackTitle.textContent = '✅ إجابة صحيحة!';
+      } else {
+        wrongAnswers++;
+        elements.feedback.className = 'feedback show wrong';
+        elements.feedbackTitle.textContent = '❌ إجابة خاطئة';
+      }
+      elements.feedbackText.textContent = q.e;
+      elements.nextBtn.disabled = false;
+      updateStats();
+    }
+
+    function updateStats() {
+      elements.correctCount.textContent = correctAnswers;
+      elements.wrongCount.textContent = wrongAnswers;
+      elements.totalCount.textContent = correctAnswers + wrongAnswers;
+    }
+
+    function showResult() {
+      elements.quizArea.classList.add('hidden');
+      elements.resultCard.classList.add('show');
+      const pct = Math.round((correctAnswers / shuffledQuestions.length) * 100);
+      elements.finalScore.textContent = pct + '%';
+      elements.finalTotalLabel.textContent = `من ${shuffledQuestions.length} سؤال`;
+      elements.finalCorrect.textContent = correctAnswers;
+      elements.finalWrong.textContent = wrongAnswers;
+      elements.progressFill.style.width = '100%';
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion >= shuffledQuestions.length) {
+        showResult();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      correctAnswers = 0;
+      wrongAnswers = 0;
+      shuffledQuestions = shuffle([...questions]);
+      elements.quizArea.classList.remove('hidden');
+      elements.resultCard.classList.remove('show');
+      elements.nextBtn.disabled = true;
+      updateStats();
+      loadQuestion();
+    }
+
+    elements.nextBtn.addEventListener('click', nextQuestion);
+    elements.restartBtn.addEventListener('click', restartQuiz);
+    elements.playAgainBtn.addEventListener('click', restartQuiz);
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      elements.installBanner.classList.add('show');
+    });
+
+    elements.installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        if (result.outcome === 'accepted') {
+          elements.installBanner.classList.remove('show');
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      elements.installBanner.classList.remove('show');
+    });
+
+    updateStats();
+    loadQuestion();
+  </script>
+</body>
+</html>

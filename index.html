@@ -62,10 +62,23 @@
     .result-details .r-wrong { color: #e74c3c; }
     .progress-bar { width: 100%; height: 4px; background: #0f3460; border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
     .progress-fill { height: 100%; background: #e94560; transition: width 0.4s; border-radius: 2px; }
+    .welcome-card { text-align: center; padding: 40px 25px; }
+    .welcome-card .logo { width: 100px; height: 100px; background: linear-gradient(135deg, #e94560, #0f3460); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 3rem; font-weight: bold; color: #fff; box-shadow: 0 8px 32px rgba(233,69,96,0.3); }
+    .welcome-card h2 { font-size: 2rem; color: #fff; margin-bottom: 5px; }
+    .welcome-card h2 span { color: #e94560; }
+    .welcome-card .sub { color: #aaa; font-size: 1rem; margin-bottom: 25px; }
+    .welcome-card .rules { text-align: start; background: #1a1a2e; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
+    .welcome-card .rules h3 { color: #f39c12; margin-bottom: 10px; font-size: 1rem; }
+    .welcome-card .rules li { color: #bbb; font-size: 0.9rem; margin: 8px 0; list-style: none; }
+    .welcome-card .rules li::before { content: "▸ "; color: #e94560; }
+    .welcome-card .btn { max-width: 250px; margin: 0 auto; padding: 15px; font-size: 1.1rem; }
+    .welcome-card.hidden { display: none; }
     .install-banner { display: none; background: #0f3460; padding: 12px 20px; border-radius: 12px; margin-bottom: 15px; align-items: center; justify-content: space-between; }
     .install-banner.show { display: flex; }
     .install-banner p { font-size: 0.9rem; }
     .install-banner .btn { flex: 0; padding: 8px 20px; font-size: 0.85rem; }
+    .quiz-content { display: none; }
+    .quiz-content.show { display: block; }
     .quiz-area { display: block; }
     .quiz-area.hidden { display: none; }
     footer { text-align: center; padding: 20px; color: #555; font-size: 0.85rem; }
@@ -84,11 +97,31 @@
       <p>اختبر نفسك: too/enough - Passive - Pronouns - Modals - Present Perfect - Future - Conditionals</p>
     </header>
 
+    <div class="card welcome-card" id="welcomeCard">
+      <div class="logo">JAD</div>
+      <h2>مرحباً <span>JAD</span>! 👋</h2>
+      <p class="sub">اختبر نفسك في 9 قواعد أساسية للغة الإنجليزية</p>
+      <div class="rules">
+        <h3>📚 القواعد التي سيتم اختبارك فيها:</h3>
+        <li>Too / Not ... Enough</li>
+        <li>Present Passive (made of, used for, worn by)</li>
+        <li>Indefinite Pronouns (someone, anywhere, nothing)</li>
+        <li>Modals (should / must / need to)</li>
+        <li>Present Perfect with Since / For</li>
+        <li>Present Continuous for Future Arrangements</li>
+        <li>May, Might, Could, Can't, Must</li>
+        <li>First Conditional (If... will)</li>
+        <li>Going to vs Will</li>
+      </div>
+      <button class="btn btn-success" id="startBtn">▶ ابدأ الاختبار</button>
+    </div>
+
     <div class="install-banner" id="installBanner">
       <p>📲 ثبّت التطبيق للاستخدام بدون إنترنت</p>
       <button class="btn btn-success" id="installBtn">تثبيت</button>
     </div>
 
+    <div class="quiz-content" id="quizContent">
     <div class="stats">
       <div class="stat correct">
         <span id="correctCount">0</span>
@@ -135,6 +168,8 @@
       <div class="btn-group">
         <button class="btn btn-success" id="playAgainBtn">🔄 إعادة الاختبار</button>
       </div>
+    </div>
+
     </div>
 
     <footer>English Grammar Quiz &copy; 2026</footer>
@@ -233,7 +268,10 @@
       playAgainBtn: document.getElementById('playAgainBtn'),
       installBanner: document.getElementById('installBanner'),
       installBtn: document.getElementById('installBtn'),
-      finalTotalLabel: document.getElementById('finalTotalLabel')
+      finalTotalLabel: document.getElementById('finalTotalLabel'),
+      welcomeCard: document.getElementById('welcomeCard'),
+      quizContent: document.getElementById('quizContent'),
+      startBtn: document.getElementById('startBtn')
     };
 
     function shuffle(arr) {
@@ -328,10 +366,19 @@
       shuffledQuestions = shuffle([...questions]);
       elements.quizArea.classList.remove('hidden');
       elements.resultCard.classList.remove('show');
+      elements.quizContent.classList.remove('show');
+      elements.welcomeCard.classList.remove('hidden');
       elements.nextBtn.disabled = true;
       updateStats();
-      loadQuestion();
     }
+
+    elements.startBtn.addEventListener('click', () => {
+      elements.welcomeCard.classList.add('hidden');
+      elements.quizContent.classList.add('show');
+      shuffledQuestions = shuffle([...questions]);
+      updateStats();
+      loadQuestion();
+    });
 
     elements.nextBtn.addEventListener('click', nextQuestion);
     elements.restartBtn.addEventListener('click', restartQuiz);
@@ -358,8 +405,6 @@
       elements.installBanner.classList.remove('show');
     });
 
-    updateStats();
-    loadQuestion();
   </script>
 </body>
 </html>

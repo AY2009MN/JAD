@@ -147,7 +147,6 @@
       display: grid;
       align-content: start;
       gap: 12px;
-      animation: riseIn 0.28s ease both;
     }
     .idea-card h3 {
       color: var(--gold);
@@ -156,8 +155,23 @@
     }
     .idea-card p {
       margin: 0;
-      color: var(--muted);
+      color: var(--text);
       line-height: 1.75;
+    }
+    .idea-steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+    .idea-steps li {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      line-height: 1.7;
+      color: var(--text);
     }
     .idea-visual {
       min-height: 190px;
@@ -751,7 +765,7 @@
 
     <section class="panel review hidden" id="review">
       <h2>راجع دروسك</h2>
-      <p>اختر القسم الذي تريد مراجعته. رتبت الدروس حتى تراجع فكرة واحدة في كل مرة.</p>
+      <p>اختر القسم ثم اختر المثال. كل مراجعة هنا مثال محلول مختصر، وليس مجرد فكرة.</p>
       <div class="review-tabs" id="reviewTabs">
         <button class="tab-btn active" data-panel="summary">ملخص الدروس</button>
         <button class="tab-btn" data-panel="equations">حل المعادلات</button>
@@ -763,44 +777,10 @@
           <div class="idea-visual" id="ideaVisual"></div>
           <h3 id="ideaTitle"></h3>
           <p id="ideaText"></p>
+          <ul class="idea-steps" id="ideaSteps"></ul>
           <div class="calc-line" id="ideaCalc"></div>
         </div>
         <div class="idea-controls" id="ideaControls"></div>
-      </div>
-      <div class="summary-grid">
-        <div class="summary-card">
-          <strong>الأسس والجذور</strong>
-          <ul>
-            <li>الصيغة الأسية تختصر الضرب المتكرر، مثل 6 × 6 × 6 = 6<sup>3</sup>.</li>
-            <li>أي عدد غير صفر مرفوع للأس 0 يساوي 1.</li>
-            <li>الجذر التربيعي مثل <span class="root"><span class="root-symbol">√</span><span class="radicand">324</span></span> يبحث عن عدد ضرب في نفسه.</li>
-            <li>الجذر التكعيبي مثل <span class="root"><span class="root-index">3</span><span class="root-symbol">√</span><span class="radicand">1728</span></span> يبحث عن عدد ضرب في نفسه ثلاث مرات.</li>
-          </ul>
-        </div>
-        <div class="summary-card">
-          <strong>العبارات والمعادلات</strong>
-          <ul>
-            <li>نحسب القوى والأقواس أولًا ثم الضرب والقسمة ثم الجمع والطرح.</li>
-            <li>في المقادير الجبرية نعوض قيمة المتغير ثم نتبع ترتيب العمليات.</li>
-            <li>لحل المعادلة نحافظ على التوازن: ما نفعله في طرف نفعله في الطرف الآخر.</li>
-          </ul>
-        </div>
-        <div class="summary-card">
-          <strong>النسب والتناسب</strong>
-          <ul>
-            <li>النسب المتكافئة تصف العلاقة نفسها بين كميتين.</li>
-            <li>نحصل على نسبة مكافئة بضرب الطرفين أو قسمتهما على العدد نفسه.</li>
-            <li>في جداول النسب نبحث عن عامل التحويل ثم نطبقه على الطرفين.</li>
-          </ul>
-        </div>
-        <div class="summary-card">
-          <strong>الهندسة والقياس</strong>
-          <ul>
-            <li>مجموع زوايا الشكل الرباعي 360°، ومجموع الزوايا على مستقيم 180°.</li>
-            <li>الارتفاع هو المسافة العمودية، وليس دائمًا الضلع المائل.</li>
-            <li>الأشكال المركبة تحل بجمع مساحات الأجزاء أو طرح الجزء المزال.</li>
-          </ul>
-        </div>
       </div>
       </div>
       <div class="review-panel" data-panel="equations">
@@ -1440,44 +1420,82 @@
     const lessonIdeas = [
       {
         key: "powers",
-        title: "الأسس: اختصار الضرب المتكرر",
-        text: "عندما يتكرر العدد نفسه في الضرب، نكتب العدد مرة واحدة ونرفع فوقه عدد مرات التكرار.",
-        calc: "2 × 2 × 2 × 2 = 2^4 = 16",
+        title: "مثال: كتابة الضرب المتكرر بالأسس",
+        text: "السؤال: اكتب 2 × 2 × 2 × 2 بالصّيغة الأسية ثم أوجد القيمة.",
+        steps: [
+          "العدد المتكرر هو 2.",
+          "تكرر 2 أربع مرات، إذن الأس هو 4.",
+          "نكتب: 2 × 2 × 2 × 2 = 2^4.",
+          "نحسب القيمة: 2 × 2 = 4، ثم 4 × 2 = 8، ثم 8 × 2 = 16."
+        ],
+        calc: "إذن 2^4 = 16",
         visual: "power"
       },
       {
         key: "roots",
-        title: "الجذور: عكس فكرة القوى",
-        text: "الجذر التربيعي يسأل: ما العدد الذي ضرب في نفسه؟ والجذر التكعيبي يسأل: ما العدد الذي ضرب في نفسه ثلاث مرات؟",
-        calc: "√324 = 18 لأن 18 × 18 = 324، و ∛1728 = 12",
+        title: "مثال: الجذر التربيعي والجذر التكعيبي",
+        text: "السؤال: أوجد √324 و ∛1728.",
+        steps: [
+          "في الجذر التربيعي نبحث عن عدد إذا ضرب في نفسه يعطينا 324.",
+          "18 × 18 = 324، إذن √324 = 18.",
+          "في الجذر التكعيبي نبحث عن عدد إذا ضرب في نفسه ثلاث مرات يعطينا 1728.",
+          "12 × 12 × 12 = 1728، إذن ∛1728 = 12."
+        ],
+        calc: "√324 = 18، و ∛1728 = 12",
         visual: "root"
       },
       {
         key: "ratios",
-        title: "النسب المتكافئة",
-        text: "نحصل على نسبة مكافئة عندما نضرب طرفي النسبة أو نقسمهما على العدد نفسه.",
-        calc: "3 : 8 = 15 : 40 لأننا ضربنا الطرفين في 5",
+        title: "مثال: النسب المتكافئة",
+        text: "السؤال: أكمل النسبة 3 : 8 = 15 : ؟",
+        steps: [
+          "ننظر إلى الطرف الأول: 3 أصبح 15.",
+          "3 × 5 = 15، إذن عامل التحويل هو 5.",
+          "نضرب الطرف الثاني في العامل نفسه: 8 × 5 = 40.",
+          "إذن النسبة المكافئة هي 15 : 40."
+        ],
+        calc: "3 : 8 = 15 : 40",
         visual: "ratio"
       },
       {
         key: "equations",
-        title: "المعادلات: حافظ على توازن الطرفين",
-        text: "المعادلة مثل ميزان. أي عملية تفعلها في طرف يجب أن تفعلها في الطرف الآخر.",
-        calc: "2y - 7 = 3 ثم نضيف 7 للطرفين ثم نقسم على 2",
+        title: "مثال: حل معادلة بخطوتين",
+        text: "السؤال: حل المعادلة 2y - 7 = 3.",
+        steps: [
+          "نريد أن يبقى الحد 2y وحده، لذلك نزيل -7 بالعملية العكسية وهي +7.",
+          "2y - 7 + 7 = 3 + 7.",
+          "تصبح: 2y = 10.",
+          "الآن y مضروب في 2، فنقسم الطرفين على 2.",
+          "y = 10 ÷ 2 = 5."
+        ],
+        calc: "التحقق: 2 × 5 - 7 = 3",
         visual: "equation"
       },
       {
         key: "angles",
-        title: "الزوايا في الأشكال",
-        text: "مجموع زوايا الشكل الرباعي 360°، والزوايا على مستقيم مجموعها 180°.",
-        calc: "x + 70 + 80 + 90 = 360 إذن x = 120°",
+        title: "مثال: زاوية مجهولة في شكل رباعي",
+        text: "السؤال: شكل رباعي زواياه 70° و80° و90° وx. أوجد x.",
+        steps: [
+          "مجموع زوايا أي شكل رباعي يساوي 360°.",
+          "نكتب المعادلة: x + 70 + 80 + 90 = 360.",
+          "نجمع الزوايا المعروفة: 70 + 80 + 90 = 240.",
+          "إذن x + 240 = 360.",
+          "x = 360 - 240 = 120°."
+        ],
+        calc: "إذن الزاوية المجهولة x = 120°",
         visual: "angles"
       },
       {
         key: "areas",
-        title: "المساحات: اختر القاعدة والارتفاع",
-        text: "في متوازي الأضلاع والمثلث وشبه المنحرف، أهم شيء هو الارتفاع العمودي وليس الضلع المائل.",
-        calc: "A = b × h أو A = 1/2 × b × h حسب الشكل",
+        title: "مثال: مساحة متوازي الأضلاع",
+        text: "السؤال: أوجد مساحة متوازي أضلاع قاعدته 9 m وارتفاعه 4 m.",
+        steps: [
+          "القانون: مساحة متوازي الأضلاع = القاعدة × الارتفاع.",
+          "ننتبه أن الارتفاع يكون عموديًا على القاعدة.",
+          "نعوض: A = 9 × 4.",
+          "إذن المساحة = 36 m2."
+        ],
+        calc: "A = b × h = 9 × 4 = 36 m2",
         visual: "area"
       }
     ];
@@ -1491,6 +1509,7 @@
       ideaVisual: document.getElementById("ideaVisual"),
       ideaTitle: document.getElementById("ideaTitle"),
       ideaText: document.getElementById("ideaText"),
+      ideaSteps: document.getElementById("ideaSteps"),
       ideaCalc: document.getElementById("ideaCalc"),
       ideaControls: document.getElementById("ideaControls"),
       reviewBtn: document.getElementById("reviewBtn"),
@@ -1677,6 +1696,12 @@
       el.ideaVisual.innerHTML = visualForKind(idea.visual);
       el.ideaTitle.textContent = idea.title;
       el.ideaText.textContent = idea.text;
+      el.ideaSteps.innerHTML = "";
+      idea.steps.forEach((step) => {
+        const li = document.createElement("li");
+        li.innerHTML = formatMath(step);
+        el.ideaSteps.appendChild(li);
+      });
       el.ideaCalc.innerHTML = formatMath(idea.calc);
       el.ideaControls.innerHTML = "";
       lessonIdeas.forEach((item) => {

@@ -141,6 +141,40 @@
       color: var(--gold);
       font-weight: 800;
     }
+    .worked-examples {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 12px 0 20px;
+    }
+    .worked-card {
+      background: #fffdf7;
+      border: 1px solid #efd69f;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .worked-card strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+    .worked-card ol {
+      margin: 0;
+      padding-inline-start: 22px;
+      color: var(--text);
+      line-height: 1.75;
+    }
+    .worked-card code {
+      direction: ltr;
+      display: inline-block;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 2px 6px;
+      color: #17342d;
+      font-weight: 800;
+    }
     .formula-lab {
       display: grid;
       grid-template-columns: minmax(250px, 0.95fr) minmax(290px, 1.05fr);
@@ -494,6 +528,7 @@
       .formula-lab { grid-template-columns: 1fr; }
       .law-grid { grid-template-columns: 1fr; }
       .summary-grid { grid-template-columns: 1fr; }
+      .worked-examples { grid-template-columns: 1fr; }
       .hero-actions { grid-template-columns: 1fr; }
       .topbar { grid-template-columns: repeat(2, 1fr); }
       .question { padding: 16px; }
@@ -559,6 +594,29 @@
             <li>الارتفاع هو المسافة العمودية، وليس دائمًا الضلع المائل.</li>
             <li>الأشكال المركبة تحل بجمع مساحات الأجزاء أو طرح الجزء المزال.</li>
           </ul>
+        </div>
+      </div>
+      <h3>طريقة حل المعادلات خطوة بخطوة</h3>
+      <div class="worked-examples">
+        <div class="worked-card">
+          <strong>مثال 1: معادلة بعملية واحدة</strong>
+          <ol>
+            <li>نبدأ من المعادلة: <code>x + 4 = 10</code>.</li>
+            <li>هدفنا أن يبقى <code>x</code> وحده؛ لذلك نزيل <code>+4</code> بالعملية العكسية وهي الطرح.</li>
+            <li>نطرح 4 من الطرفين: <code>x + 4 - 4 = 10 - 4</code>.</li>
+            <li>يبقى: <code>x = 6</code>.</li>
+            <li>نتحقق: <code>6 + 4 = 10</code>، إذن الحل صحيح.</li>
+          </ol>
+        </div>
+        <div class="worked-card">
+          <strong>مثال 2: معادلة بخطوتين</strong>
+          <ol>
+            <li>نبدأ من المعادلة: <code>2y - 7 = 3</code>.</li>
+            <li>أولًا نزيل <code>-7</code> بإضافة 7 للطرفين: <code>2y - 7 + 7 = 3 + 7</code>.</li>
+            <li>تصبح المعادلة: <code>2y = 10</code>.</li>
+            <li>الآن <code>y</code> مضروب في 2، فنستخدم العملية العكسية ونقسم الطرفين على 2: <code>y = 10 ÷ 2</code>.</li>
+            <li>إذن <code>y = 5</code>. نتحقق: <code>2 × 5 - 7 = 3</code>.</li>
+          </ol>
         </div>
       </div>
       <h3>قوانين المساحة والحجم</h3>

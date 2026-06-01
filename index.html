@@ -1433,15 +1433,16 @@
       },
       {
         key: "roots",
-        title: "مثال: الجذر التربيعي والجذر التكعيبي",
-        text: "السؤال: أوجد √324 و ∛1728.",
+        title: "مثال: الجذور بالحصر والتقريب",
+        text: "السؤال: أوجد √900 و ∛4096 بطريقة سريعة.",
         steps: [
-          "في الجذر التربيعي نبحث عن عدد إذا ضرب في نفسه يعطينا 324.",
-          "18 × 18 = 324، إذن √324 = 18.",
-          "في الجذر التكعيبي نبحث عن عدد إذا ضرب في نفسه ثلاث مرات يعطينا 1728.",
-          "12 × 12 × 12 = 1728، إذن ∛1728 = 12."
+          "√900: ناخذ من كل صفرين صفرًا واحدًا، ويتبقى جذر 9.",
+          "√9 = 3، ومع الصفر الناتج من زوج الأصفار تصبح الإجابة 30.",
+          "∛4096: نحصر العدد بين مكعبين: 10^3 = 1000 و20^3 = 8000، إذن الجواب بين 10 و20.",
+          "رقم الآحاد في 4096 هو 6، والعدد الذي مكعبه ينتهي بـ 6 هو 6.",
+          "إذن العدد بين 10 و20 وآحاده 6، فالجواب 16."
         ],
-        calc: "√324 = 18، و ∛1728 = 12",
+        calc: "√900 = 30، و ∛4096 = 16",
         visual: "root"
       },
       {
@@ -1597,7 +1598,7 @@
         return `<div class="visual-card"><div class="visual-title">الأس يعني عدد مرات التكرار</div><div class="math-stack"><span class="factor">2</span><span>×</span><span class="factor">2</span><span>×</span><span class="factor">2</span><span>×</span><span class="factor">2</span><span>=</span><span>${formatMath("2^4")}</span></div></div>`;
       }
       if (kind === "root") {
-        return `<div class="visual-card"><div class="visual-title">الجذر يبحث عن العدد الأصلي</div><div class="math-stack"><span>${formatMath("√324")}</span><span>=</span><span>18</span></div><div class="math-stack"><span>${formatMath("∛1728")}</span><span>=</span><span>12</span></div></div>`;
+        return `<div class="visual-card"><div class="visual-title">الجذور بالحصر ورقم الآحاد</div><div class="math-stack"><span>${formatMath("√900")}</span><span>=</span><span>30</span></div><div class="math-stack"><span>${formatMath("∛4096")}</span><span>=</span><span>16</span></div><div class="dimension-row"><span>10<sup>3</sup> = 1000</span><span>20<sup>3</sup> = 8000</span><span>4096 بينهما</span></div></div>`;
       }
       if (kind === "ratio") {
         return `<div class="visual-card">${svgShell(`

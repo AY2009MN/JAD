@@ -77,6 +77,7 @@
     .intro {
       padding: clamp(20px, 4vw, 34px);
     }
+    .intro.hidden, .review.hidden { display: none; }
     .intro h2 {
       margin: 0 0 10px;
       font-size: clamp(1.35rem, 3vw, 2rem);
@@ -85,6 +86,60 @@
       color: var(--muted);
       line-height: 1.8;
       font-size: 1rem;
+    }
+    .hero-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .hero-note {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 18px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .review {
+      display: none;
+      padding: clamp(18px, 4vw, 30px);
+      margin-top: 14px;
+    }
+    .review.show { display: block; }
+    .review h2, .review h3 { margin-top: 0; }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .summary-card {
+      background: #fbfefd;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .summary-card strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+    .summary-card ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .summary-card li::before {
+      content: "- ";
+      color: var(--gold);
+      font-weight: 800;
     }
     .formula-lab {
       display: grid;
@@ -141,6 +196,27 @@
       background: linear-gradient(135deg, #f8fbff, #f7fff9);
       border: 1px solid #e3eee9;
       border-radius: 8px;
+    }
+    .shape-demo {
+      display: grid;
+      place-items: center;
+      gap: 12px;
+    }
+    .dimension-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .dimension-row span {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 9px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 800;
+      direction: ltr;
     }
     .shape {
       position: relative;
@@ -417,6 +493,8 @@
       .badge { width: 100%; }
       .formula-lab { grid-template-columns: 1fr; }
       .law-grid { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .hero-actions { grid-template-columns: 1fr; }
       .topbar { grid-template-columns: repeat(2, 1fr); }
       .question { padding: 16px; }
       .brand p { font-size: 0.9rem; }
@@ -435,7 +513,55 @@
 
     <section class="panel intro" id="intro">
       <h2>مرحبًا جاد</h2>
-      <p>راجع القوانين بالأشكال والحساب قبل الاختبار. اضغط على أي قانون لترى الشكل وطريقة التعويض خطوة بخطوة.</p>
+      <p>اختر مسارك: راجع الدروس أولًا بشرح تفاعلي وأشكال واضحة، أو ادخل مباشرة إلى اختبار متنوع بخطوات حل بعد كل سؤال.</p>
+      <div class="hero-actions">
+        <button class="btn primary" id="reviewBtn">راجع دروسك</button>
+        <button class="btn" id="startBtn">اختبر نفسك</button>
+      </div>
+      <div class="hero-note">الاختبار شامل وموسع: أسس وجذور، عبارات ومعادلات، نسب، وزوايا ومساحات. قسم المراجعة يعطيك القوانين وطريقة التعويض قبل أن تبدأ.</div>
+      <div class="actions">
+        <button class="btn ghost" id="installBtn" hidden>تثبيت التطبيق</button>
+      </div>
+    </section>
+
+    <section class="panel review hidden" id="review">
+      <h2>راجع دروسك</h2>
+      <p>هذا ملخص سريع لأفكار الدروس، ثم قوانين هندسية تفاعلية بأبعاد ظاهرة على الأشكال.</p>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <strong>الأسس والجذور</strong>
+          <ul>
+            <li>الصيغة الأسية تختصر الضرب المتكرر، مثل 6 × 6 × 6 = 6^3.</li>
+            <li>أي عدد غير صفر مرفوع للأس 0 يساوي 1.</li>
+            <li>الجذر التربيعي يبحث عن عدد ضرب في نفسه، والجذر التكعيبي يبحث عن عدد ضرب في نفسه ثلاث مرات.</li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <strong>العبارات والمعادلات</strong>
+          <ul>
+            <li>نحسب القوى والأقواس أولًا ثم الضرب والقسمة ثم الجمع والطرح.</li>
+            <li>في المقادير الجبرية نعوض قيمة المتغير ثم نتبع ترتيب العمليات.</li>
+            <li>لحل المعادلة نحافظ على التوازن: ما نفعله في طرف نفعله في الطرف الآخر.</li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <strong>النسب والتناسب</strong>
+          <ul>
+            <li>النسب المتكافئة تصف العلاقة نفسها بين كميتين.</li>
+            <li>نحصل على نسبة مكافئة بضرب الطرفين أو قسمتهما على العدد نفسه.</li>
+            <li>في جداول النسب نبحث عن عامل التحويل ثم نطبقه على الطرفين.</li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <strong>الهندسة والقياس</strong>
+          <ul>
+            <li>مجموع زوايا الشكل الرباعي 360°، ومجموع الزوايا على مستقيم 180°.</li>
+            <li>الارتفاع هو المسافة العمودية، وليس دائمًا الضلع المائل.</li>
+            <li>الأشكال المركبة تحل بجمع مساحات الأجزاء أو طرح الجزء المزال.</li>
+          </ul>
+        </div>
+      </div>
+      <h3>قوانين المساحة والحجم</h3>
       <div class="formula-lab">
         <div class="law-grid" id="lawGrid">
           <button class="law-card active" data-law="square"><strong>مساحة المربع</strong><span>A = s × s<br>مثال: ضلع 5 cm</span></button>
@@ -456,8 +582,8 @@
         </div>
       </div>
       <div class="actions">
-        <button class="btn primary" id="startBtn">ابدأ نموذج الاختبار</button>
-        <button class="btn ghost" id="installBtn" hidden>تثبيت التطبيق</button>
+        <button class="btn primary" id="reviewStartBtn">اختبر نفسك الآن</button>
+        <button class="btn ghost" id="homeBtn">العودة للترحيب</button>
       </div>
     </section>
 
@@ -999,43 +1125,43 @@
     const laws = {
       square: {
         title: "مساحة المربع",
-        shape: '<div class="shape square"><span>s</span></div>',
+        shape: '<div class="shape-demo"><div class="shape square"><span>s</span></div><div class="dimension-row"><span>s = 5 cm</span><span>كل الأضلاع متساوية</span></div></div>',
         rule: "المربع له أربعة أضلاع متساوية. المساحة تساوي طول الضلع مضروبًا في نفسه.",
         calc: "إذا كان s = 5 cm، فإن A = 5 × 5 = 25 cm²."
       },
       rectangle: {
         title: "مساحة المستطيل",
-        shape: '<div class="shape rectangle"><span>l × w</span></div>',
+        shape: '<div class="shape-demo"><div class="shape rectangle"><span>l × w</span></div><div class="dimension-row"><span>l = 8 cm</span><span>w = 3 cm</span></div></div>',
         rule: "المستطيل نحسبه بضرب الطول في العرض.",
         calc: "إذا كان الطول 8 cm والعرض 3 cm، فإن A = 8 × 3 = 24 cm²."
       },
       triangle: {
         title: "مساحة المثلث",
-        shape: '<div class="shape triangle"><span>1/2</span></div>',
+        shape: '<div class="shape-demo"><div class="shape triangle"><span>1/2</span></div><div class="dimension-row"><span>b = 10 cm</span><span>h = 6 cm</span></div></div>',
         rule: "المثلث نصف متوازي أضلاع له القاعدة والارتفاع نفسيهما، لذلك نأخذ نصف حاصل ضرب القاعدة في الارتفاع.",
         calc: "إذا كانت القاعدة 10 cm والارتفاع 6 cm، فإن A = 1/2 × 10 × 6 = 30 cm²."
       },
       trapezoid: {
         title: "مساحة شبه المنحرف",
-        shape: '<div class="shape trapezoid"><span>b1 + b2</span></div>',
+        shape: '<div class="shape-demo"><div class="shape trapezoid"><span>b1 + b2</span></div><div class="dimension-row"><span>b1 = 12 cm</span><span>b2 = 8 cm</span><span>h = 5 cm</span></div></div>',
         rule: "نجمع القاعدتين المتوازيتين، ثم نضرب في الارتفاع، ثم نأخذ النصف.",
         calc: "إذا كانت القاعدتان 12 cm و8 cm والارتفاع 5 cm، فإن A = 1/2 × (12 + 8) × 5 = 50 cm²."
       },
       parallelogram: {
         title: "مساحة متوازي الأضلاع",
-        shape: '<div class="shape parallelogram"><span>b × h</span></div>',
+        shape: '<div class="shape-demo"><div class="shape parallelogram"><span>b × h</span></div><div class="dimension-row"><span>b = 9 m</span><span>h = 4 m</span><span>h عمودي</span></div></div>',
         rule: "نختار القاعدة، ثم نضربها في الارتفاع العمودي عليها، وليس في الضلع المائل.",
         calc: "إذا كانت القاعدة 9 m والارتفاع 4 m، فإن A = 9 × 4 = 36 m²."
       },
       cube: {
         title: "حجم المكعب والمساحة الجانبية والكلية",
-        shape: '<div class="shape cube"><span>s</span></div>',
+        shape: '<div class="shape-demo"><div class="shape cube"><span>s</span></div><div class="dimension-row"><span>s = 3 cm</span><span>V = s^3</span><span>SA = 6s^2</span></div></div>',
         rule: "المكعب كل أضلاعه متساوية. حجمه s^3، ومساحته الجانبية 4s^2، ومساحته الكلية 6s^2.",
         calc: "إذا كان s = 3 cm: V = 3 × 3 × 3 = 27 cm³، وLA = 4 × 9 = 36 cm²، وSA = 6 × 9 = 54 cm²."
       },
       prism: {
         title: "حجم المنشور الرباعي القائم ومساحته",
-        shape: '<div class="shape prism"><span>l × w × h</span></div>',
+        shape: '<div class="shape-demo"><div class="shape prism"><span>l × w × h</span></div><div class="dimension-row"><span>l = 6</span><span>w = 4</span><span>h = 5</span></div></div>',
         rule: "المنشور الرباعي القائم حجمه يساوي مساحة القاعدة في الارتفاع. المساحة الجانبية تساوي محيط القاعدة في الارتفاع.",
         calc: "إذا كان l = 6 وw = 4 وh = 5: V = 6 × 4 × 5 = 120، وLA = 2(6 + 4) × 5 = 100، وSA = 2(6×4 + 6×5 + 4×5) = 148."
       }
@@ -1043,10 +1169,14 @@
 
     const el = {
       intro: document.getElementById("intro"),
+      review: document.getElementById("review"),
       quiz: document.getElementById("quiz"),
       result: document.getElementById("result"),
       questionCard: document.getElementById("questionCard"),
+      reviewBtn: document.getElementById("reviewBtn"),
       startBtn: document.getElementById("startBtn"),
+      reviewStartBtn: document.getElementById("reviewStartBtn"),
+      homeBtn: document.getElementById("homeBtn"),
       installBtn: document.getElementById("installBtn"),
       nextBtn: document.getElementById("nextBtn"),
       restartBtn: document.getElementById("restartBtn"),
@@ -1104,6 +1234,15 @@
       });
     }
 
+    function showReview() {
+      el.intro.classList.add("hidden");
+      el.review.classList.remove("hidden");
+      el.review.classList.add("show");
+      el.quiz.classList.remove("show");
+      renderLaw("square");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     function startQuiz() {
       state.current = 0;
       state.correct = 0;
@@ -1111,7 +1250,9 @@
       state.answered = false;
       state.misses = [];
       state.order = shuffle(questions);
-      el.intro.style.display = "none";
+      el.intro.classList.add("hidden");
+      el.review.classList.add("hidden");
+      el.review.classList.remove("show");
       el.quiz.classList.add("show");
       el.questionCard.style.display = "block";
       el.result.classList.remove("show");
@@ -1269,10 +1410,16 @@
 
     function backToIntro() {
       el.quiz.classList.remove("show");
-      el.intro.style.display = "block";
+      el.review.classList.add("hidden");
+      el.review.classList.remove("show");
+      el.intro.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    el.reviewBtn.addEventListener("click", showReview);
     el.startBtn.addEventListener("click", startQuiz);
+    el.reviewStartBtn.addEventListener("click", startQuiz);
+    el.homeBtn.addEventListener("click", backToIntro);
     el.againBtn.addEventListener("click", startQuiz);
     el.nextBtn.addEventListener("click", nextQuestion);
     el.restartBtn.addEventListener("click", backToIntro);

@@ -131,6 +131,62 @@
     }
     .review-panel { display: none; }
     .review-panel.active { display: block; }
+    .idea-stage {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(250px, 0.85fr);
+      gap: 14px;
+      align-items: stretch;
+      margin: 16px 0;
+    }
+    .idea-card {
+      background: linear-gradient(135deg, #ffffff, #f6fbf8);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 280px;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      animation: riseIn 0.28s ease both;
+    }
+    .idea-card h3 {
+      color: var(--gold);
+      margin: 0;
+      font-size: 1.35rem;
+    }
+    .idea-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .idea-visual {
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      background: #fbfefd;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .idea-controls {
+      display: grid;
+      gap: 10px;
+    }
+    .idea-chip {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: start;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .idea-chip.active {
+      background: var(--soft);
+      color: var(--gold);
+      border-color: #d99b2b;
+    }
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -468,6 +524,74 @@
       line-height: 1.65;
       font-size: clamp(1.18rem, 2.5vw, 1.65rem);
     }
+    .question-visual {
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #ffffff, #f6fbf8);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 0 0 16px;
+      padding: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(22, 135, 90, 0.05);
+    }
+    .visual-card {
+      width: min(100%, 520px);
+      display: grid;
+      gap: 10px;
+      place-items: center;
+      color: var(--text);
+      text-align: center;
+    }
+    .visual-card svg {
+      width: min(100%, 430px);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 8px 14px rgba(23, 52, 45, 0.08));
+    }
+    .visual-title {
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 1rem;
+    }
+    .math-stack {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      direction: ltr;
+      font-size: clamp(1.4rem, 4vw, 2.25rem);
+      font-weight: 900;
+    }
+    .factor {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #e0f2fe;
+      border: 2px solid #38bdf8;
+      animation: popIn 0.32s ease both;
+    }
+    .solution-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .solution-badge.wrong {
+      background: #fff1f2;
+      color: #b91c1c;
+      border-color: #fecdd3;
+    }
     .options {
       display: grid;
       gap: 10px;
@@ -571,6 +695,14 @@
       color: var(--muted);
       line-height: 1.7;
     }
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.86); }
+      to { opacity: 1; transform: scale(1); }
+    }
     footer {
       color: #78948b;
       text-align: center;
@@ -587,6 +719,7 @@
       .worked-examples { grid-template-columns: 1fr; }
       .hero-actions { grid-template-columns: 1fr; }
       .review-tabs { grid-template-columns: 1fr; }
+      .idea-stage { grid-template-columns: 1fr; }
       .topbar { grid-template-columns: repeat(2, 1fr); }
       .question { padding: 16px; }
       .brand p { font-size: 0.9rem; }
@@ -625,6 +758,15 @@
         <button class="tab-btn" data-panel="geometry">الهندسة والقوانين</button>
       </div>
       <div class="review-panel active" data-panel="summary">
+      <div class="idea-stage">
+        <div class="idea-card">
+          <div class="idea-visual" id="ideaVisual"></div>
+          <h3 id="ideaTitle"></h3>
+          <p id="ideaText"></p>
+          <div class="calc-line" id="ideaCalc"></div>
+        </div>
+        <div class="idea-controls" id="ideaControls"></div>
+      </div>
       <div class="summary-grid">
         <div class="summary-card">
           <strong>الأسس والجذور</strong>
@@ -728,6 +870,7 @@
           <span id="questionTopic"></span>
         </div>
         <h2 id="questionText"></h2>
+        <div class="question-visual" id="questionVisual"></div>
         <div id="answerArea"></div>
         <div class="feedback" id="feedback">
           <h3 id="feedbackTitle"></h3>
@@ -1294,12 +1437,62 @@
       }
     };
 
+    const lessonIdeas = [
+      {
+        key: "powers",
+        title: "الأسس: اختصار الضرب المتكرر",
+        text: "عندما يتكرر العدد نفسه في الضرب، نكتب العدد مرة واحدة ونرفع فوقه عدد مرات التكرار.",
+        calc: "2 × 2 × 2 × 2 = 2^4 = 16",
+        visual: "power"
+      },
+      {
+        key: "roots",
+        title: "الجذور: عكس فكرة القوى",
+        text: "الجذر التربيعي يسأل: ما العدد الذي ضرب في نفسه؟ والجذر التكعيبي يسأل: ما العدد الذي ضرب في نفسه ثلاث مرات؟",
+        calc: "√324 = 18 لأن 18 × 18 = 324، و ∛1728 = 12",
+        visual: "root"
+      },
+      {
+        key: "ratios",
+        title: "النسب المتكافئة",
+        text: "نحصل على نسبة مكافئة عندما نضرب طرفي النسبة أو نقسمهما على العدد نفسه.",
+        calc: "3 : 8 = 15 : 40 لأننا ضربنا الطرفين في 5",
+        visual: "ratio"
+      },
+      {
+        key: "equations",
+        title: "المعادلات: حافظ على توازن الطرفين",
+        text: "المعادلة مثل ميزان. أي عملية تفعلها في طرف يجب أن تفعلها في الطرف الآخر.",
+        calc: "2y - 7 = 3 ثم نضيف 7 للطرفين ثم نقسم على 2",
+        visual: "equation"
+      },
+      {
+        key: "angles",
+        title: "الزوايا في الأشكال",
+        text: "مجموع زوايا الشكل الرباعي 360°، والزوايا على مستقيم مجموعها 180°.",
+        calc: "x + 70 + 80 + 90 = 360 إذن x = 120°",
+        visual: "angles"
+      },
+      {
+        key: "areas",
+        title: "المساحات: اختر القاعدة والارتفاع",
+        text: "في متوازي الأضلاع والمثلث وشبه المنحرف، أهم شيء هو الارتفاع العمودي وليس الضلع المائل.",
+        calc: "A = b × h أو A = 1/2 × b × h حسب الشكل",
+        visual: "area"
+      }
+    ];
+
     const el = {
       intro: document.getElementById("intro"),
       review: document.getElementById("review"),
       quiz: document.getElementById("quiz"),
       result: document.getElementById("result"),
       questionCard: document.getElementById("questionCard"),
+      ideaVisual: document.getElementById("ideaVisual"),
+      ideaTitle: document.getElementById("ideaTitle"),
+      ideaText: document.getElementById("ideaText"),
+      ideaCalc: document.getElementById("ideaCalc"),
+      ideaControls: document.getElementById("ideaControls"),
       reviewBtn: document.getElementById("reviewBtn"),
       startBtn: document.getElementById("startBtn"),
       reviewStartBtn: document.getElementById("reviewStartBtn"),
@@ -1317,6 +1510,7 @@
       questionNumber: document.getElementById("questionNumber"),
       questionTopic: document.getElementById("questionTopic"),
       questionText: document.getElementById("questionText"),
+      questionVisual: document.getElementById("questionVisual"),
       answerArea: document.getElementById("answerArea"),
       feedback: document.getElementById("feedback"),
       feedbackTitle: document.getElementById("feedbackTitle"),
@@ -1369,6 +1563,104 @@
         .replace(/\b(cm|m|km|mm)3\b/g, '<span class="math">$1<sup>3</sup></span>');
     }
 
+    function svgShell(content, viewBox = "0 0 420 190") {
+      return `<svg viewBox="${viewBox}" role="img" aria-hidden="true">${content}</svg>`;
+    }
+
+    function dimensionsFromQuestion(q, fallback = []) {
+      const matches = [...String(q.q || "").matchAll(/(\d+(?:\.\d+)?)\s*(cm|m|km|mm)?/g)];
+      const dims = matches.map((match) => `${match[1]}${match[2] ? " " + match[2] : ""}`);
+      return dims.length ? dims : fallback;
+    }
+
+    function visualForKind(kind, q = {}) {
+      if (kind === "power") {
+        return `<div class="visual-card"><div class="visual-title">الأس يعني عدد مرات التكرار</div><div class="math-stack"><span class="factor">2</span><span>×</span><span class="factor">2</span><span>×</span><span class="factor">2</span><span>×</span><span class="factor">2</span><span>=</span><span>${formatMath("2^4")}</span></div></div>`;
+      }
+      if (kind === "root") {
+        return `<div class="visual-card"><div class="visual-title">الجذر يبحث عن العدد الأصلي</div><div class="math-stack"><span>${formatMath("√324")}</span><span>=</span><span>18</span></div><div class="math-stack"><span>${formatMath("∛1728")}</span><span>=</span><span>12</span></div></div>`;
+      }
+      if (kind === "ratio") {
+        return `<div class="visual-card">${svgShell(`
+          <text x="210" y="28" text-anchor="middle" fill="#b77912" font-size="18" font-weight="800">نضرب الطرفين في العدد نفسه</text>
+          <rect x="58" y="58" width="84" height="54" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+          <text x="100" y="92" text-anchor="middle" font-size="20" font-weight="800">3 : 8</text>
+          <path d="M155 85 H265" stroke="#b77912" stroke-width="4" marker-end="url(#arrow)"/>
+          <text x="210" y="74" text-anchor="middle" fill="#b77912" font-size="16" font-weight="800">×5</text>
+          <rect x="278" y="58" width="96" height="54" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+          <text x="326" y="92" text-anchor="middle" font-size="20" font-weight="800">15 : 40</text>
+          <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#b77912"/></marker></defs>
+        `)}</div>`;
+      }
+      if (kind === "equation") {
+        return `<div class="visual-card">${svgShell(`
+          <text x="210" y="30" text-anchor="middle" fill="#b77912" font-size="18" font-weight="800">المعادلة ميزان</text>
+          <line x1="90" y1="90" x2="330" y2="90" stroke="#17342d" stroke-width="5"/>
+          <line x1="210" y1="60" x2="210" y2="145" stroke="#17342d" stroke-width="5"/>
+          <rect x="50" y="105" width="120" height="44" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+          <text x="110" y="133" text-anchor="middle" font-size="18" font-weight="800">2y - 7</text>
+          <rect x="250" y="105" width="120" height="44" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+          <text x="310" y="133" text-anchor="middle" font-size="18" font-weight="800">3</text>
+        `)}</div>`;
+      }
+      if (kind === "angles") {
+        return `<div class="visual-card">${svgShell(`
+          <text x="210" y="25" text-anchor="middle" fill="#b77912" font-size="17" font-weight="800">مجموع زوايا الشكل الرباعي 360°</text>
+          <polygon points="105,55 285,45 335,145 80,150" fill="#fef3c7" stroke="#d97706" stroke-width="4"/>
+          <text x="120" y="78" font-size="16" font-weight="800">70°</text>
+          <text x="270" y="72" font-size="16" font-weight="800">80°</text>
+          <text x="290" y="135" font-size="16" font-weight="800">90°</text>
+          <text x="112" y="135" font-size="18" font-weight="900" fill="#d64545">x°</text>
+        `)}</div>`;
+      }
+      if (kind === "triangle") {
+        const [base = "10 cm", height = "6 cm"] = dimensionsFromQuestion(q, ["10 cm", "6 cm"]);
+        return `<div class="visual-card">${svgShell(`
+          <text x="210" y="24" text-anchor="middle" fill="#9a670d" font-size="17" font-weight="900">مساحة المثلث = نصف القاعدة × الارتفاع</text>
+          <polygon points="95,150 330,150 160,45" fill="#fde68a" stroke="#b45309" stroke-width="5"/>
+          <line x1="160" y1="45" x2="160" y2="150" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="6 5"/>
+          <text x="210" y="176" text-anchor="middle" font-size="16" font-weight="900" fill="#17342d">b = ${base}</text>
+          <text x="174" y="102" font-size="16" font-weight="900" fill="#1d4ed8">h = ${height}</text>
+        `)}</div>`;
+      }
+      if (kind === "trapezoid") {
+        const [b1 = "12 cm", b2 = "8 cm", h = "5 cm"] = dimensionsFromQuestion(q, ["12 cm", "8 cm", "5 cm"]);
+        return `<div class="visual-card">${svgShell(`
+          <text x="210" y="24" text-anchor="middle" fill="#9a670d" font-size="17" font-weight="900">شبه المنحرف: متوسط القاعدتين × الارتفاع</text>
+          <polygon points="118,60 302,60 348,150 72,150" fill="#fce7f3" stroke="#be185d" stroke-width="5"/>
+          <line x1="210" y1="60" x2="210" y2="150" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="6 5"/>
+          <text x="210" y="50" text-anchor="middle" font-size="15" font-weight="900" fill="#17342d">b2 = ${b2}</text>
+          <text x="210" y="176" text-anchor="middle" font-size="15" font-weight="900" fill="#17342d">b1 = ${b1}</text>
+          <text x="222" y="110" font-size="15" font-weight="900" fill="#1d4ed8">h = ${h}</text>
+        `)}</div>`;
+      }
+      if (kind === "parallelogram" || kind === "area") {
+        const [base = "9 m", height = "4 m"] = dimensionsFromQuestion(q, ["9 m", "4 m"]);
+        return `<div class="visual-card">${svgShell(`
+          <text x="210" y="24" text-anchor="middle" fill="#9a670d" font-size="17" font-weight="900">الارتفاع عمودي على القاعدة</text>
+          <polygon points="120,55 330,55 285,150 75,150" fill="#ccfbf1" stroke="#0f766e" stroke-width="5"/>
+          <line x1="285" y1="55" x2="285" y2="150" stroke="#1d4ed8" stroke-width="4" stroke-dasharray="6 5"/>
+          <text x="180" y="176" text-anchor="middle" font-size="15" font-weight="900" fill="#17342d">b = ${base}</text>
+          <text x="296" y="108" font-size="15" font-weight="900" fill="#1d4ed8">h = ${height}</text>
+        `)}</div>`;
+      }
+      return `<div class="visual-card"><div class="visual-title">فكر في المعطيات ثم طبّق القانون خطوة بخطوة</div><div class="math-stack">${formatMath(q.topic || "رياضيات")}</div></div>`;
+    }
+
+    function visualForQuestion(q) {
+      const topic = q.topic || "";
+      const text = q.q || "";
+      if (topic.includes("الصيغة") || topic.includes("الأس") || text.includes("^")) return visualForKind("power", q);
+      if (topic.includes("الجذر") || text.includes("√") || text.includes("∛")) return visualForKind("root", q);
+      if (topic.includes("نسب") || topic.includes("نسبة") || topic.includes("التناسب")) return visualForKind("ratio", q);
+      if (topic.includes("معاد")) return visualForKind("equation", q);
+      if (topic.includes("زوايا") || topic.includes("زاوية") || topic.includes("الأشكال الرباعية")) return visualForKind("angles", q);
+      if (topic.includes("مثلث")) return visualForKind("triangle", q);
+      if (topic.includes("شبه المنحرف")) return visualForKind("trapezoid", q);
+      if (topic.includes("متوازي") || topic.includes("شكل مركب") || topic.includes("مساحة")) return visualForKind("parallelogram", q);
+      return visualForKind("equation", q);
+    }
+
     function showReviewPanel(panelName) {
       document.querySelectorAll(".review-panel").forEach((panel) => {
         panel.classList.toggle("active", panel.dataset.panel === panelName);
@@ -1377,6 +1669,24 @@
         button.classList.toggle("active", button.dataset.panel === panelName);
       });
       if (panelName === "geometry") renderLaw("square");
+      if (panelName === "summary") renderIdea("powers");
+    }
+
+    function renderIdea(key) {
+      const idea = lessonIdeas.find((item) => item.key === key) || lessonIdeas[0];
+      el.ideaVisual.innerHTML = visualForKind(idea.visual);
+      el.ideaTitle.textContent = idea.title;
+      el.ideaText.textContent = idea.text;
+      el.ideaCalc.innerHTML = formatMath(idea.calc);
+      el.ideaControls.innerHTML = "";
+      lessonIdeas.forEach((item) => {
+        const button = document.createElement("button");
+        button.className = `idea-chip${item.key === idea.key ? " active" : ""}`;
+        button.type = "button";
+        button.textContent = item.title;
+        button.addEventListener("click", () => renderIdea(item.key));
+        el.ideaControls.appendChild(button);
+      });
     }
 
     function renderLaw(key) {
@@ -1435,6 +1745,7 @@
       el.questionNumber.textContent = `السؤال ${state.current + 1} من ${state.order.length}`;
       el.questionTopic.textContent = q.topic;
       el.questionText.innerHTML = formatMath(q.q);
+      el.questionVisual.innerHTML = visualForQuestion(q);
       el.answerArea.innerHTML = "";
 
       if (q.type === "choice") {
@@ -1473,7 +1784,7 @@
 
     function showFeedback(isCorrect, q) {
       el.feedback.className = `feedback show ${isCorrect ? "correct" : "wrong"}`;
-      el.feedbackTitle.textContent = isCorrect ? "إجابة صحيحة" : "إجابة غير صحيحة";
+      el.feedbackTitle.innerHTML = `<span class="solution-badge ${isCorrect ? "" : "wrong"}">${isCorrect ? "إجابة صحيحة" : "إجابة غير صحيحة"}</span> الحل خطوة بخطوة`;
       el.steps.innerHTML = "";
       q.steps.forEach((step) => {
         const li = document.createElement("li");

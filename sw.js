@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jad-math-quiz-v11';
+const CACHE_NAME = 'jad-math-quiz-v12';
 const ASSETS = [
   'index.html',
   'manifest.json',

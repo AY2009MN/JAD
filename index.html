@@ -109,6 +109,28 @@
     }
     .review.show { display: block; }
     .review h2, .review h3 { margin-top: 0; }
+    .review-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .tab-btn {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .tab-btn.active {
+      background: var(--soft);
+      border-color: #d99b2b;
+      color: var(--gold);
+    }
+    .review-panel { display: none; }
+    .review-panel.active { display: block; }
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -174,6 +196,40 @@
       padding: 2px 6px;
       color: #17342d;
       font-weight: 800;
+    }
+    sup {
+      font-size: 0.68em;
+      line-height: 0;
+      vertical-align: super;
+      margin-inline-start: 1px;
+    }
+    .math {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+    .root {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 1px;
+      font-weight: 800;
+    }
+    .root-symbol {
+      font-size: 1.12em;
+      line-height: 1;
+    }
+    .root-index {
+      font-size: 0.58em;
+      line-height: 1;
+      margin-inline-end: -2px;
+      transform: translateY(-0.25em);
+    }
+    .radicand {
+      border-top: 2px solid currentColor;
+      padding: 0 3px;
+      line-height: 1.15;
     }
     .formula-lab {
       display: grid;
@@ -530,6 +586,7 @@
       .summary-grid { grid-template-columns: 1fr; }
       .worked-examples { grid-template-columns: 1fr; }
       .hero-actions { grid-template-columns: 1fr; }
+      .review-tabs { grid-template-columns: 1fr; }
       .topbar { grid-template-columns: repeat(2, 1fr); }
       .question { padding: 16px; }
       .brand p { font-size: 0.9rem; }
@@ -561,14 +618,21 @@
 
     <section class="panel review hidden" id="review">
       <h2>راجع دروسك</h2>
-      <p>هذا ملخص سريع لأفكار الدروس، ثم قوانين هندسية تفاعلية بأبعاد ظاهرة على الأشكال.</p>
+      <p>اختر القسم الذي تريد مراجعته. رتبت الدروس حتى تراجع فكرة واحدة في كل مرة.</p>
+      <div class="review-tabs" id="reviewTabs">
+        <button class="tab-btn active" data-panel="summary">ملخص الدروس</button>
+        <button class="tab-btn" data-panel="equations">حل المعادلات</button>
+        <button class="tab-btn" data-panel="geometry">الهندسة والقوانين</button>
+      </div>
+      <div class="review-panel active" data-panel="summary">
       <div class="summary-grid">
         <div class="summary-card">
           <strong>الأسس والجذور</strong>
           <ul>
-            <li>الصيغة الأسية تختصر الضرب المتكرر، مثل 6 × 6 × 6 = 6^3.</li>
+            <li>الصيغة الأسية تختصر الضرب المتكرر، مثل 6 × 6 × 6 = 6<sup>3</sup>.</li>
             <li>أي عدد غير صفر مرفوع للأس 0 يساوي 1.</li>
-            <li>الجذر التربيعي يبحث عن عدد ضرب في نفسه، والجذر التكعيبي يبحث عن عدد ضرب في نفسه ثلاث مرات.</li>
+            <li>الجذر التربيعي مثل <span class="root"><span class="root-symbol">√</span><span class="radicand">324</span></span> يبحث عن عدد ضرب في نفسه.</li>
+            <li>الجذر التكعيبي مثل <span class="root"><span class="root-index">3</span><span class="root-symbol">√</span><span class="radicand">1728</span></span> يبحث عن عدد ضرب في نفسه ثلاث مرات.</li>
           </ul>
         </div>
         <div class="summary-card">
@@ -596,6 +660,8 @@
           </ul>
         </div>
       </div>
+      </div>
+      <div class="review-panel" data-panel="equations">
       <h3>طريقة حل المعادلات خطوة بخطوة</h3>
       <div class="worked-examples">
         <div class="worked-card">
@@ -619,6 +685,8 @@
           </ol>
         </div>
       </div>
+      </div>
+      <div class="review-panel" data-panel="geometry">
       <h3>قوانين المساحة والحجم</h3>
       <div class="formula-lab">
         <div class="law-grid" id="lawGrid">
@@ -627,7 +695,7 @@
           <button class="law-card" data-law="triangle"><strong>مساحة المثلث</strong><span>A = 1/2 × b × h<br>مثال: 10 cm و6 cm</span></button>
           <button class="law-card" data-law="trapezoid"><strong>مساحة شبه المنحرف</strong><span>A = 1/2 × (b1 + b2) × h<br>مثال: 12، 8، 5</span></button>
           <button class="law-card" data-law="parallelogram"><strong>مساحة متوازي الأضلاع</strong><span>A = b × h<br>مثال: 9 m و4 m</span></button>
-          <button class="law-card" data-law="cube"><strong>حجم المكعب ومساحته</strong><span>V = s^3<br>LA = 4s^2، SA = 6s^2</span></button>
+          <button class="law-card" data-law="cube"><strong>حجم المكعب ومساحته</strong><span>V = s<sup>3</sup><br>LA = 4s<sup>2</sup>، SA = 6s<sup>2</sup></span></button>
           <button class="law-card" data-law="prism"><strong>المنشور الرباعي القائم</strong><span>V = l × w × h<br>SA = 2(lw + lh + wh)</span></button>
         </div>
         <div class="shape-stage">
@@ -638,6 +706,7 @@
             <div class="calc-line" id="lawCalc"></div>
           </div>
         </div>
+      </div>
       </div>
       <div class="actions">
         <button class="btn primary" id="reviewStartBtn">اختبر نفسك الآن</button>
@@ -1236,6 +1305,7 @@
       reviewStartBtn: document.getElementById("reviewStartBtn"),
       homeBtn: document.getElementById("homeBtn"),
       installBtn: document.getElementById("installBtn"),
+      reviewTabs: document.getElementById("reviewTabs"),
       nextBtn: document.getElementById("nextBtn"),
       restartBtn: document.getElementById("restartBtn"),
       againBtn: document.getElementById("againBtn"),
@@ -1281,12 +1351,40 @@
         .replace(/²/g, "2");
     }
 
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatMath(value) {
+      return escapeHtml(value)
+        .replace(/∛\s*([0-9A-Za-z().-]+)/g, '<span class="root"><span class="root-index">3</span><span class="root-symbol">√</span><span class="radicand">$1</span></span>')
+        .replace(/√\s*([0-9A-Za-z().-]+)/g, '<span class="root"><span class="root-symbol">√</span><span class="radicand">$1</span></span>')
+        .replace(/(\([^)]+\)|[A-Za-z0-9]+)\^([0-9؟]+)/g, '<span class="math">$1<sup>$2</sup></span>')
+        .replace(/\b(cm|m|km|mm)2\b/g, '<span class="math">$1<sup>2</sup></span>')
+        .replace(/\b(cm|m|km|mm)3\b/g, '<span class="math">$1<sup>3</sup></span>');
+    }
+
+    function showReviewPanel(panelName) {
+      document.querySelectorAll(".review-panel").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.panel === panelName);
+      });
+      el.reviewTabs.querySelectorAll(".tab-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.panel === panelName);
+      });
+      if (panelName === "geometry") renderLaw("square");
+    }
+
     function renderLaw(key) {
       const law = laws[key] || laws.square;
       el.shapeWrap.innerHTML = law.shape;
       el.lawTitle.textContent = law.title;
-      el.lawRule.textContent = law.rule;
-      el.lawCalc.textContent = law.calc;
+      el.lawRule.innerHTML = formatMath(law.rule);
+      el.lawCalc.innerHTML = formatMath(law.calc);
       el.lawGrid.querySelectorAll(".law-card").forEach((card) => {
         card.classList.toggle("active", card.dataset.law === key);
       });
@@ -1297,7 +1395,7 @@
       el.review.classList.remove("hidden");
       el.review.classList.add("show");
       el.quiz.classList.remove("show");
-      renderLaw("square");
+      showReviewPanel("summary");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1336,7 +1434,7 @@
       el.source.textContent = "";
       el.questionNumber.textContent = `السؤال ${state.current + 1} من ${state.order.length}`;
       el.questionTopic.textContent = q.topic;
-      el.questionText.textContent = q.q;
+      el.questionText.innerHTML = formatMath(q.q);
       el.answerArea.innerHTML = "";
 
       if (q.type === "choice") {
@@ -1345,7 +1443,7 @@
         q.options.forEach((option, index) => {
           const btn = document.createElement("button");
           btn.className = "option";
-          btn.textContent = option;
+          btn.innerHTML = formatMath(option);
           btn.addEventListener("click", () => gradeChoice(index));
           wrap.appendChild(btn);
         });
@@ -1379,7 +1477,7 @@
       el.steps.innerHTML = "";
       q.steps.forEach((step) => {
         const li = document.createElement("li");
-        li.textContent = step;
+        li.innerHTML = formatMath(step);
         el.steps.appendChild(li);
       });
       el.source.textContent = "شرح من الدروس";
@@ -1460,7 +1558,7 @@
         state.misses.slice(0, 8).forEach((miss) => {
           const div = document.createElement("div");
           div.className = "mistake";
-          div.textContent = `${miss.q} إجابتك: ${miss.userAnswer}. الصحيح: ${miss.correct}.`;
+          div.innerHTML = formatMath(`${miss.q} إجابتك: ${miss.userAnswer}. الصحيح: ${miss.correct}.`);
           el.mistakes.appendChild(div);
         });
       }
@@ -1481,6 +1579,10 @@
     el.againBtn.addEventListener("click", startQuiz);
     el.nextBtn.addEventListener("click", nextQuestion);
     el.restartBtn.addEventListener("click", backToIntro);
+    el.reviewTabs.addEventListener("click", (event) => {
+      const button = event.target.closest(".tab-btn");
+      if (button) showReviewPanel(button.dataset.panel);
+    });
     el.lawGrid.addEventListener("click", (event) => {
       const card = event.target.closest(".law-card");
       if (card) renderLaw(card.dataset.law);

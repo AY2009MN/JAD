@@ -1,8 +1,11 @@
-const CACHE_NAME = 'grammar-quiz-v1';
+const CACHE_NAME = 'jad-math-quiz-v2';
 const ASSETS = [
   'index.html',
   'manifest.json',
-  'icon.svg'
+  'icon.svg',
+  '1.PDF',
+  '2.PDF',
+  '3.PDF'
 ];
 
 self.addEventListener('install', (event) => {

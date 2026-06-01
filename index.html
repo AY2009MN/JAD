@@ -3,410 +3,1298 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="تطبيق مسائل قواعد اللغة الإنجليزية - اختبر نفسك في قواعد اللغة الإنجليزية">
-  <meta name="theme-color" content="#1a1a2e">
+  <meta name="description" content="شرح تفاعلي ونماذج اختبارات رياضيات متقدمة لجاد">
+  <meta name="theme-color" content="#ffffff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="English Grammar Quiz">
+  <meta name="apple-mobile-web-app-title" content="اختبار رياضيات JAD">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
-  <title>English Grammar Quiz</title>
+  <title>اختبار رياضيات JAD</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-    body { background: #1a1a2e; color: #eee; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    .container { max-width: 700px; width: 100%; }
-    header { text-align: center; padding: 30px 0; }
-    header h1 { font-size: 1.8rem; color: #e94560; margin-bottom: 5px; }
-    header p { color: #aaa; font-size: 0.95rem; }
-    .stats { display: flex; justify-content: space-around; background: #16213e; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-    .stat { text-align: center; }
-    .stat span { display: block; font-size: 1.5rem; font-weight: bold; color: #0f3460; }
-    .stat label { font-size: 0.8rem; color: #888; }
-    .stat.correct span { color: #2ecc71; }
-    .stat.wrong span { color: #e74c3c; }
-    .stat.total span { color: #f39c12; }
-    .card { background: #16213e; border-radius: 16px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-    .question-number { color: #e94560; font-size: 0.85rem; margin-bottom: 10px; }
-    .question-text { font-size: 1.2rem; margin-bottom: 20px; line-height: 1.6; color: #fff; }
-    .options { display: flex; flex-direction: column; gap: 10px; }
-    .option { background: #1a1a2e; border: 2px solid #0f3460; border-radius: 12px; padding: 15px; cursor: pointer; transition: all 0.2s; font-size: 1rem; text-align: start; color: #ddd; }
-    .option:hover { border-color: #e94560; background: #1f1f3a; }
-    .option.selected { border-color: #f39c12; background: #2a2a4a; }
-    .option.correct { border-color: #2ecc71; background: #1a3a2a; color: #2ecc71; }
-    .option.wrong { border-color: #e74c3c; background: #3a1a1a; color: #e74c3c; }
-    .option:disabled { cursor: not-allowed; opacity: 0.7; }
-    .feedback { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; }
+    :root {
+      color-scheme: light;
+      --bg: #f7faf8;
+      --panel: #ffffff;
+      --panel-2: #f0f7f4;
+      --line: #d7e5df;
+      --text: #17342d;
+      --muted: #60766f;
+      --gold: #b77912;
+      --green: #16875a;
+      --red: #d64545;
+      --blue: #2563eb;
+      --soft: #fff7e6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #ffffff 0, var(--bg) 42rem);
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      padding: 16px;
+    }
+    .app {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0 18px;
+    }
+    .brand h1 {
+      margin: 0 0 6px;
+      font-size: clamp(1.45rem, 3vw, 2.2rem);
+      letter-spacing: 0;
+    }
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+    .badge {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      color: var(--gold);
+      background: var(--soft);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 16px 40px rgba(32, 74, 64, 0.10);
+    }
+    .intro {
+      padding: clamp(20px, 4vw, 34px);
+    }
+    .intro h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+    }
+    .intro p, .intro li {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+    .formula-lab {
+      display: grid;
+      grid-template-columns: minmax(250px, 0.95fr) minmax(290px, 1.05fr);
+      gap: 14px;
+      margin: 18px 0 22px;
+    }
+    .law-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .law-card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 118px;
+      color: var(--text);
+      cursor: pointer;
+      text-align: start;
+      transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    }
+    .law-card:hover, .law-card.active {
+      background: #fffaf0;
+      border-color: #d99b2b;
+      transform: translateY(-1px);
+    }
+    .law-card strong {
+      display: block;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .law-card span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+    .shape-stage {
+      min-height: 100%;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      background: #fbfefd;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .shape-wrap {
+      min-height: 150px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #f8fbff, #f7fff9);
+      border: 1px solid #e3eee9;
+      border-radius: 8px;
+    }
+    .shape {
+      position: relative;
+      display: grid;
+      place-items: center;
+      color: #0f2f28;
+      font-weight: 900;
+    }
+    .shape.square {
+      width: 100px;
+      height: 100px;
+      background: #dbeafe;
+      border: 3px solid #2563eb;
+    }
+    .shape.rectangle {
+      width: 150px;
+      height: 86px;
+      background: #dcfce7;
+      border: 3px solid #16a34a;
+    }
+    .shape.triangle {
+      width: 0;
+      height: 0;
+      border-left: 70px solid transparent;
+      border-right: 70px solid transparent;
+      border-bottom: 120px solid #fde68a;
+    }
+    .shape.triangle span {
+      position: absolute;
+      top: 70px;
+      left: -24px;
+      color: #3b2f06;
+    }
+    .shape.parallelogram {
+      width: 140px;
+      height: 90px;
+      transform: skew(-18deg);
+      background: #ccfbf1;
+      border: 3px solid #0f766e;
+    }
+    .shape.parallelogram span { transform: skew(18deg); }
+    .shape.trapezoid {
+      width: 150px;
+      border-bottom: 96px solid #fce7f3;
+      border-left: 32px solid transparent;
+      border-right: 32px solid transparent;
+      height: 0;
+    }
+    .shape.trapezoid span {
+      position: absolute;
+      top: 42px;
+      left: 44px;
+      color: #4a1230;
+    }
+    .shape.cube {
+      width: 96px;
+      height: 96px;
+      background: #e0f2fe;
+      border: 3px solid #0284c7;
+      box-shadow: 24px -20px 0 #bae6fd;
+    }
+    .shape.prism {
+      width: 140px;
+      height: 82px;
+      background: #ede9fe;
+      border: 3px solid #7c3aed;
+      box-shadow: 30px -22px 0 #ddd6fe;
+    }
+    .law-detail h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1.25rem;
+    }
+    .law-detail p {
+      margin: 6px 0;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .calc-line {
+      margin-top: 10px;
+      background: var(--soft);
+      border: 1px solid #f0d59d;
+      border-radius: 8px;
+      padding: 12px;
+      color: #573b09;
+      line-height: 1.8;
+      font-weight: 700;
+    }
+    .actions, .answer-row, .nav-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    button, input {
+      font: inherit;
+    }
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 13px 18px;
+      font-weight: 800;
+      cursor: pointer;
+      color: #ffffff;
+      background: #1d6b59;
+      min-height: 48px;
+      transition: transform 0.14s, background 0.14s, opacity 0.14s;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-1px); background: #24705f; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn.primary { background: #d08a16; color: #140d02; }
+    .btn.primary:hover:not(:disabled) { background: #f0a11b; }
+    .btn.ghost { background: #ffffff; border: 1px solid var(--line); color: var(--muted); }
+    .quiz { display: none; }
+    .quiz.show { display: block; }
+    .topbar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat b { display: block; font-size: 1.45rem; color: var(--gold); }
+    .stat span { color: var(--muted); font-size: 0.85rem; }
+    .progress {
+      height: 7px;
+      overflow: hidden;
+      background: #eef7f3;
+      border-radius: 999px;
+      margin: 10px 0 14px;
+      border: 1px solid var(--line);
+    }
+    .progress > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold), var(--green));
+      transition: width 0.25s;
+    }
+    .question {
+      padding: clamp(18px, 4vw, 28px);
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .question h2 {
+      margin: 0 0 18px;
+      line-height: 1.65;
+      font-size: clamp(1.18rem, 2.5vw, 1.65rem);
+    }
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+    .option {
+      width: 100%;
+      text-align: start;
+      background: #fbfefd;
+      border: 2px solid var(--line);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 14px 16px;
+      cursor: pointer;
+      line-height: 1.55;
+      min-height: 54px;
+    }
+    .option:hover:not(:disabled) { border-color: var(--gold); }
+    .option.correct { border-color: var(--green); background: rgba(55, 209, 132, 0.13); }
+    .option.wrong { border-color: var(--red); background: rgba(255, 107, 107, 0.12); }
+    .answer-input {
+      flex: 1 1 210px;
+      min-height: 52px;
+      border-radius: 8px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+      padding: 12px 14px;
+      direction: ltr;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .answer-input:focus { outline: 2px solid rgba(183, 121, 18, 0.28); }
+    .feedback {
+      display: none;
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fbfefd;
+    }
     .feedback.show { display: block; }
-    .feedback.correct { background: #1a3a2a; border: 1px solid #2ecc71; color: #2ecc71; }
-    .feedback.wrong { background: #3a1a1a; border: 1px solid #e74c3c; color: #e74c3c; }
-    .feedback h4 { margin-bottom: 5px; }
-    .feedback p { color: #ccc; font-size: 0.9rem; }
-    .btn-group { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-    .btn { padding: 12px 30px; border: none; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: 0.2s; flex: 1; min-width: 120px; font-weight: 600; }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-primary { background: #e94560; color: #fff; }
-    .btn-primary:hover:not(:disabled) { background: #d63851; }
-    .btn-success { background: #2ecc71; color: #fff; }
-    .btn-success:hover:not(:disabled) { background: #27ae60; }
-    .btn-secondary { background: #0f3460; color: #fff; }
-    .btn-secondary:hover:not(:disabled) { background: #1a4a8a; }
-    .result-card { display: none; text-align: center; }
-    .result-card.show { display: block; }
-    .result-card .score { font-size: 4rem; font-weight: bold; color: #e94560; }
-    .result-card .score-label { color: #aaa; font-size: 1rem; }
-    .result-details { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
-    .result-details div { text-align: center; }
-    .result-details span { display: block; font-size: 1.8rem; font-weight: bold; }
-    .result-details .r-correct { color: #2ecc71; }
-    .result-details .r-wrong { color: #e74c3c; }
-    .progress-bar { width: 100%; height: 4px; background: #0f3460; border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
-    .progress-fill { height: 100%; background: #e94560; transition: width 0.4s; border-radius: 2px; }
-    .welcome-card { text-align: center; padding: 40px 25px; }
-    .welcome-card .logo { width: 100px; height: 100px; background: linear-gradient(135deg, #e94560, #0f3460); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 3rem; font-weight: bold; color: #fff; box-shadow: 0 8px 32px rgba(233,69,96,0.3); }
-    .welcome-card h2 { font-size: 2rem; color: #fff; margin-bottom: 5px; }
-    .welcome-card h2 span { color: #e94560; }
-    .welcome-card .sub { color: #aaa; font-size: 1rem; margin-bottom: 25px; }
-    .welcome-card .rules { text-align: start; background: #1a1a2e; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
-    .welcome-card .rules h3 { color: #f39c12; margin-bottom: 10px; font-size: 1rem; }
-    .welcome-card .rules li { color: #bbb; font-size: 0.9rem; margin: 8px 0; list-style: none; }
-    .welcome-card .rules li::before { content: "▸ "; color: #e94560; }
-    .welcome-card .btn { max-width: 250px; margin: 0 auto; padding: 15px; font-size: 1.1rem; }
-    .welcome-card.hidden { display: none; }
-    .install-banner { display: none; background: #0f3460; padding: 12px 20px; border-radius: 12px; margin-bottom: 15px; align-items: center; justify-content: space-between; gap: 10px; }
-    .install-banner.show { display: flex; }
-    .install-banner p { font-size: 0.85rem; color: #ddd; flex: 1; }
-    .install-banner .btn { flex: 0; padding: 8px 20px; font-size: 0.85rem; white-space: nowrap; }
-    .install-banner.show { display: flex; }
-    .install-banner p { font-size: 0.9rem; }
-    .install-banner .btn { flex: 0; padding: 8px 20px; font-size: 0.85rem; }
-    .quiz-content { display: none; }
-    .quiz-content.show { display: block; }
-    .quiz-area { display: block; }
-    .quiz-area.hidden { display: none; }
-    footer { text-align: center; padding: 20px; color: #555; font-size: 0.85rem; }
-    @media (max-width: 480px) {
+    .feedback.correct { border-color: var(--green); }
+    .feedback.wrong { border-color: var(--red); }
+    .feedback h3 { margin: 0 0 10px; font-size: 1.08rem; }
+    .feedback.correct h3 { color: var(--green); }
+    .feedback.wrong h3 { color: var(--red); }
+    .steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+    .steps li {
+      color: var(--text);
+      line-height: 1.65;
+      padding-inline-start: 16px;
+      position: relative;
+    }
+    .steps li::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: absolute;
+      inset-inline-start: 0;
+      top: 0.75em;
+    }
+    .source {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    .nav-row { margin-top: 18px; }
+    .nav-row .btn { flex: 1 1 160px; }
+    .result {
+      display: none;
+      padding: 28px;
+      text-align: center;
+    }
+    .result.show { display: block; }
+    .score {
+      font-size: clamp(3rem, 10vw, 5rem);
+      font-weight: 900;
+      color: var(--gold);
+      margin: 8px 0;
+    }
+    .mistakes {
+      text-align: start;
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .mistake {
+      background: #fbfefd;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    footer {
+      color: #78948b;
+      text-align: center;
+      padding: 18px 0;
+      font-size: 0.86rem;
+    }
+    @media (max-width: 720px) {
       body { padding: 10px; }
-      header h1 { font-size: 1.4rem; }
-      .card { padding: 18px; }
-      .question-text { font-size: 1.05rem; }
+      header { align-items: flex-start; flex-direction: column; }
+      .badge { width: 100%; }
+      .formula-lab { grid-template-columns: 1fr; }
+      .law-grid { grid-template-columns: 1fr; }
+      .topbar { grid-template-columns: repeat(2, 1fr); }
+      .question { padding: 16px; }
+      .brand p { font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <main class="app">
     <header>
-      <h1>📝 English Grammar Quiz</h1>
-      <p>اختبر نفسك: too/enough - Passive - Pronouns - Modals - Present Perfect - Future - Conditionals</p>
+      <div class="brand">
+        <h1>نماذج اختبارات رياضيات متقدمة</h1>
+        <p>شرح تفاعلي سريع ثم اختبار رياضيات بخطوات حل بعد كل سؤال.</p>
+      </div>
+      <div class="badge">JAD Math<br>57 سؤال</div>
     </header>
 
-    <div class="card welcome-card" id="welcomeCard">
-      <div class="logo">JAD</div>
-      <h2>مرحباً <span>JAD</span>! 👋</h2>
-      <p class="sub">اختبر نفسك في 9 قواعد أساسية للغة الإنجليزية</p>
-      <div class="rules">
-        <h3>📚 القواعد التي سيتم اختبارك فيها:</h3>
-        <li>Too / Not ... Enough</li>
-        <li>Present Passive (made of, used for, worn by)</li>
-        <li>Indefinite Pronouns (someone, anywhere, nothing)</li>
-        <li>Modals (should / must / need to)</li>
-        <li>Present Perfect with Since / For</li>
-        <li>Present Continuous for Future Arrangements</li>
-        <li>May, Might, Could, Can't, Must</li>
-        <li>First Conditional (If... will)</li>
-        <li>Going to vs Will</li>
+    <section class="panel intro" id="intro">
+      <h2>مرحبًا جاد</h2>
+      <p>راجع القوانين بالأشكال والحساب قبل الاختبار. اضغط على أي قانون لترى الشكل وطريقة التعويض خطوة بخطوة.</p>
+      <div class="formula-lab">
+        <div class="law-grid" id="lawGrid">
+          <button class="law-card active" data-law="square"><strong>مساحة المربع</strong><span>A = s × s<br>مثال: ضلع 5 cm</span></button>
+          <button class="law-card" data-law="rectangle"><strong>مساحة المستطيل</strong><span>A = l × w<br>مثال: 8 cm و3 cm</span></button>
+          <button class="law-card" data-law="triangle"><strong>مساحة المثلث</strong><span>A = 1/2 × b × h<br>مثال: 10 cm و6 cm</span></button>
+          <button class="law-card" data-law="trapezoid"><strong>مساحة شبه المنحرف</strong><span>A = 1/2 × (b1 + b2) × h<br>مثال: 12، 8، 5</span></button>
+          <button class="law-card" data-law="parallelogram"><strong>مساحة متوازي الأضلاع</strong><span>A = b × h<br>مثال: 9 m و4 m</span></button>
+          <button class="law-card" data-law="cube"><strong>حجم المكعب ومساحته</strong><span>V = s^3<br>LA = 4s^2، SA = 6s^2</span></button>
+          <button class="law-card" data-law="prism"><strong>المنشور الرباعي القائم</strong><span>V = l × w × h<br>SA = 2(lw + lh + wh)</span></button>
+        </div>
+        <div class="shape-stage">
+          <div class="shape-wrap" id="shapeWrap"></div>
+          <div class="law-detail">
+            <h3 id="lawTitle"></h3>
+            <p id="lawRule"></p>
+            <div class="calc-line" id="lawCalc"></div>
+          </div>
+        </div>
       </div>
-      <div class="install-banner" id="installBanner">
-        <p>📲 ثبّت التطبيق للاستخدام بدون إنترنت</p>
-        <button class="btn btn-success" id="installBtn">تثبيت</button>
+      <div class="actions">
+        <button class="btn primary" id="startBtn">ابدأ نموذج الاختبار</button>
+        <button class="btn ghost" id="installBtn" hidden>تثبيت التطبيق</button>
       </div>
-      <button class="btn btn-primary" id="startBtn">▶ ابدأ الاختبار</button>
-    </div>
+    </section>
 
-    <div class="quiz-content" id="quizContent">
-    <div class="stats">
-      <div class="stat correct">
-        <span id="correctCount">0</span>
-        <label>✅ صحيح</label>
+    <section class="quiz" id="quiz">
+      <div class="topbar">
+        <div class="stat"><b id="correctCount">0</b><span>صحيح</span></div>
+        <div class="stat"><b id="wrongCount">0</b><span>خطأ</span></div>
+        <div class="stat"><b id="answeredCount">0</b><span>تمت الإجابة</span></div>
+        <div class="stat"><b id="totalCount">0</b><span>كل الأسئلة</span></div>
       </div>
-      <div class="stat wrong">
-        <span id="wrongCount">0</span>
-        <label>❌ خطأ</label>
-      </div>
-      <div class="stat total">
-        <span id="totalCount">0</span>
-        <label>📊 المجموع</label>
-      </div>
-    </div>
-
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-    </div>
-
-    <div class="quiz-area" id="quizArea">
-      <div class="card" id="questionCard">
-        <div class="question-number" id="questionNumber">السؤال 1 من 30</div>
-        <div class="question-text" id="questionText"></div>
-        <div class="options" id="optionsContainer"></div>
+      <div class="progress"><div id="progressFill"></div></div>
+      <article class="panel question" id="questionCard">
+        <div class="meta">
+          <span id="questionNumber"></span>
+          <span id="questionTopic"></span>
+        </div>
+        <h2 id="questionText"></h2>
+        <div id="answerArea"></div>
         <div class="feedback" id="feedback">
-          <h4 id="feedbackTitle"></h4>
-          <p id="feedbackText"></p>
+          <h3 id="feedbackTitle"></h3>
+          <ul class="steps" id="steps"></ul>
+          <div class="source" id="source"></div>
         </div>
-        <div class="btn-group">
-          <button class="btn btn-primary" id="nextBtn" disabled>التالي ←</button>
-          <button class="btn btn-secondary" id="restartBtn">ابدأ من جديد</button>
+        <div class="nav-row">
+          <button class="btn primary" id="nextBtn" disabled>السؤال التالي</button>
+          <button class="btn ghost" id="restartBtn">العودة للبداية</button>
         </div>
-      </div>
-    </div>
+      </article>
+      <section class="panel result" id="result">
+        <h2>النتيجة النهائية</h2>
+        <div class="score" id="finalScore">0%</div>
+        <p id="finalText"></p>
+        <div class="mistakes" id="mistakes"></div>
+        <button class="btn primary" id="againBtn">إعادة نموذج جديد</button>
+      </section>
+    </section>
 
-    <div class="card result-card" id="resultCard">
-      <h2>🎉 النتيجة</h2>
-      <div class="score" id="finalScore">0%</div>
-      <div class="score-label" id="finalTotalLabel">من 45 سؤال</div>
-      <div class="result-details">
-        <div><span class="r-correct" id="finalCorrect">0</span><br>✅ صحيح</div>
-        <div><span class="r-wrong" id="finalWrong">0</span><br>❌ خطأ</div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-success" id="playAgainBtn">🔄 إعادة الاختبار</button>
-      </div>
-    </div>
-
-    </div>
-
-    <footer>English Grammar Quiz &copy; 2026</footer>
-  </div>
+    <footer>Math Quiz JAD - يعمل كصفحة ثابتة على GitHub Pages</footer>
+  </main>
 
   <script>
     const questions = [
-      // ===== 1. too / not ... enough =====
-      { q: 'These shoes are ___ small for me. I need a bigger size.', o: ['too', 'enough', 'very', 'so'], a: 0, e: 'نستخدم "too" قبل الصفة لتعني "أكثر من اللازم": too small = صغير جداً (أكثر من اللازم)' },
-      { q: 'He isn\'t tall ___ to reach the shelf.', o: ['too', 'enough', 'very', 'so'], a: 1, e: 'نستخدم "enough" بعد الصفة في الجمل المنفية: isn\'t tall enough = ليس طويلاً كفاية' },
-      { q: 'The coffee is ___ hot to drink right now.', o: ['too', 'enough', 'very', 'so'], a: 0, e: '"too + صفة + to" تعني "أكثر من اللازم لـ": too hot to drink = ساخن جداً بحيث لا يمكن شربه' },
-      { q: 'She is smart ___ to pass the exam easily.', o: ['too', 'enough', 'very', 'so'], a: 1, e: '"صفة + enough + to" تعني "كافٍ لـ": smart enough = ذكية كفاية' },
-      { q: 'The bag is ___ heavy for me to carry.', o: ['too', 'enough', 'very', 'so'], a: 0, e: '"too + صفة + for + اسم + to" تعني "أكثر من اللازم بالنسبة لـ": too heavy for me to carry = ثقيل جداً بحيث لا أستطيع حمله' },
-
-      // ===== 2. Present Passive (called, made of, used to, used for, worn by) =====
-      { q: 'This fabric ___ cotton.', o: ['is made of', 'made of', 'is making of', 'makes of'], a: 0, e: 'المبني للمجهول للمضارع: is/are + Past Participle. is made of = مصنوع من (مادة خام)' },
-      { q: 'A knife ___ cutting bread.', o: ['is used to', 'is used for', 'uses for', 'used for'], a: 1, e: '"is used for + verb-ing" = يُستخدم لـ (غرض). is used for cutting = يُستخدم لتقطيع' },
-      { q: 'A thermometer ___ temperature.', o: ['is used to measure', 'is used for measure', 'used to measure', 'uses to measure'], a: 0, e: '"is used to + infinitive" = يُستخدم لـ (فعل). is used to measure = يُستخدم لقياس' },
-      { q: 'This type of hat ___ by farmers.', o: ['is worn', 'worn', 'wears', 'is wearing'], a: 0, e: 'المبني للمجهول: is worn by = يُلبس بواسطة. الفاعل الحقيقي يأتي بعد "by"' },
-      { q: 'This plant ___ "Rose" in English.', o: ['is called', 'called', 'calls', 'is calling'], a: 0, e: '"is called" = يُسمى. في المضارع المبني للمجهول: is/are + Past Participle' },
-
-      // ===== 3. Indefinite Pronouns (someone, anywhere, nothing) =====
-      { q: 'There is ___ at the door. Can you check who it is?', o: ['someone', 'anyone', 'no one', 'anything'], a: 0, e: 'في الجمل المثبتة نستخدم "someone" = شخص ما. Someone يُستخدم في الإثبات [Affirmative]' },
-      { q: 'I don\'t have ___ to go tonight.', o: ['somewhere', 'anywhere', 'nowhere', 'everywhere'], a: 1, e: 'في الجمل المنفية نستخدم "anywhere" = أي مكان. anywhere مع النفي "not"' },
-      { q: 'There is ___ in the box. It\'s completely empty.', o: ['something', 'anything', 'nothing', 'everything'], a: 2, e: '"nothing" = لا شيء. تستخدم للإشارة إلى غياب تام للأشياء' },
-      { q: 'Did you see ___ at the party?', o: ['someone', 'anyone', 'no one', 'everyone'], a: 1, e: 'في الأسئلة نستخدم "anyone" = أي شخص. anyone يُستخدم في الأسئلة [Questions]' },
-      { q: 'I have ___ important to tell you.', o: ['something', 'anything', 'nothing', 'everything'], a: 0, e: '"something" = شيء ما. تُستخدم في الجمل المثبتة [Affirmative]' },
-
-      // ===== 4. Modals (should/shouldn't, must/mustn't, need to/don't need to) =====
-      { q: 'You ___ brush your teeth before bed.', o: ['should', 'shouldn\'t', 'mustn\'t', 'don\'t need to'], a: 0, e: '"should" = ينبغي / من المستحسن. تستخدم لتقديم نصيحة أو توصية' },
-      { q: 'You ___ touch the wet wire! It\'s dangerous.', o: ['should', 'shouldn\'t', 'mustn\'t', 'need to'], a: 2, e: '"mustn\'t" = ممنوع تماماً. تعبر عن منع قاطع (prohibition)' },
-      { q: 'You ___ wear a seatbelt when driving. It\'s the law.', o: ['should', 'must', 'don\'t need to', 'shouldn\'t'], a: 1, e: '"must" = يجب / إلزامي. تعبر عن ضرورة قوية أو قانون (obligation)' },
-      { q: 'We have plenty of time. You ___ hurry.', o: ['must', 'mustn\'t', 'don\'t need to', 'should'], a: 2, e: '"don\'t need to" = لا تحتاج / ليس من الضروري. تعبر عن عدم وجود ضرورة (lack of necessity)' },
-      { q: 'You ___ eat too much sugar. It\'s bad for your health.', o: ['should', 'shouldn\'t', 'must', 'need to'], a: 1, e: '"shouldn\'t" = لا ينبغي. تستخدم لنصيحة بعدم فعل شيء' },
-
-      // ===== 5. Present Perfect with since / for =====
-      { q: 'I have lived here ___ 2015.', o: ['since', 'for', 'from', 'in'], a: 0, e: '"since" + نقطة زمنية محددة (2015). since يُستخدم مع بداية الفترة الزمنية' },
-      { q: 'She has studied English ___ three years.', o: ['since', 'for', 'from', 'in'], a: 1, e: '"for" + مدة زمنية (three years). for يُستخدم مع طول المدة' },
-      { q: 'They have been married ___ last June.', o: ['since', 'for', 'from', 'ago'], a: 0, e: '"since" + شهر/يوم محدد (last June). since يسبق نقطة زمنية' },
-      { q: 'He has worked at this company ___ a decade.', o: ['since', 'for', 'from', 'in'], a: 1, e: '"for" + فترة زمنية (a decade = عقد). for يسبق مدة زمنية' },
-      { q: 'We haven\'t seen him ___ Monday.', o: ['since', 'for', 'from', 'ago'], a: 0, e: '"since" + يوم محدد (Monday). مع النفي في Present Perfect نستخدم since للإشارة إلى نقطة البداية' },
-
-      // ===== 6. Present Continuous for Future Arrangements =====
-      { q: 'I ___ my doctor tomorrow at 3 PM.', o: ['am seeing', 'see', 'will see', 'saw'], a: 0, e: 'المضارع المستمر (am seeing) يُستخدم للترتيبات المستقبلية المؤكدة مع وقت محدد' },
-      { q: 'We ___ a party next Saturday. All our friends are invited.', o: ['are having', 'have', 'will have', 'had'], a: 0, e: '"are having" = لدينا ترتيب. Present Continuous for future arrangements يعبر عن خطط مؤكدة' },
-      { q: 'She ___ to London next week. She already bought the ticket.', o: ['is flying', 'flies', 'will fly', 'flew'], a: 0, e: '"is flying" = مسافرة (ترتيب مؤكد). مع تذكرة مشتراة نستخدم المضارع المستمر للمستقبل' },
-      { q: 'They ___ married next month.', o: ['are getting', 'get', 'will get', 'got'], a: 0, e: '"are getting married" = سيتزوجان (ترتيب مستقبلي مؤكد). Present Continuous حضر موعد الزفاف' },
-      { q: 'I ___ out with my friends this evening. We booked a table.', o: ['am going', 'go', 'will go', 'went'], a: 0, e: '"am going out" = سأخرج (خطة مؤكدة). ترتيب مسبق مع حجز = Present Continuous for future' },
-
-      // ===== 7. May, Might, Could, Can't, Must + Present Simple =====
-      { q: 'It\'s cloudy. It ___ rain later today.', o: ['might', 'can\'t', 'must', 'will'], a: 0, e: '"might" = ربما / احتمال ضعيف (قد تمطر). might يعبر عن احتمال غير مؤكد (50% أو أقل)' },
-      { q: 'He ___ be at home. I saw his car in the garage.', o: ['may', 'might', 'must', 'can\'t'], a: 2, e: '"must" = لا بد أن (استنتاج منطقي قوي). must تعبر عن يقين بناء على دليل (السيارة في المرآب)' },
-      { q: 'She ___ be tired. She just woke up an hour ago.', o: ['may', 'might', 'could', 'can\'t'], a: 3, e: '"can\'t" = لا يمكن أن (استنتاج منفي قوي). can\'t تعبر عن استحالة بناء على دليل' },
-      { q: 'Where is my phone? It ___ be in the kitchen. I\'m not sure.', o: ['could', 'must', 'can\'t', 'will'], a: 0, e: '"could" = ربما / من الممكن (احتمال). could يعبر عن احتمال غير مؤكد (similar to might/may)' },
-      { q: 'They ___ arrive late. The traffic is terrible today.', o: ['may', 'must', 'can\'t', 'will'], a: 0, e: '"may" = ربما (احتمال). may يعبر عن احتمال (قد يصلون متأخرين بسبب الزحام)' },
-
-      // ===== 8. First Conditional: If..., will... =====
-      { q: 'If it rains, we ___ at home.', o: ['will stay', 'stay', 'would stay', 'stayed'], a: 0, e: 'First Conditional: If + Present Simple, will + infinitive. الشرط = rains, النتيجة = will stay' },
-      { q: 'If you study hard, you ___ the exam.', o: ['will pass', 'pass', 'would pass', 'passed'], a: 0, e: 'First Conditional: if + Present Simple => will + المصدر. study hard → will pass' },
-      { q: 'She ___ happy if she gets the job.', o: ['will be', 'is', 'would be', 'was'], a: 0, e: 'First Conditional: النتيجة تأتي مع will. gets (Present) → will be (Future result)' },
-      { q: 'If we don\'t hurry, we ___ the bus.', o: ['will miss', 'miss', 'would miss', 'missed'], a: 0, e: 'First Conditional مع النفي: If + don\'t + Present, will + infinitive. don\'t hurry → will miss' },
-      { q: 'What ___ you do if you lose your job?', o: ['will', 'would', 'do', 'did'], a: 0, e: 'First Conditional في السؤال: Wh-word + will + فاعل + فعل + if + Present Simple' },
-
-      // ===== 9. Future Plans: Going to and will =====
-      { q: 'I ___ buy a new car next month. I already saved the money.', o: ['am going to', 'will', 'am going', 'go to'], a: 0, e: '"am going to" = خطط مسبقة + قرارات مبنية على دليل. مناسب عندما يكون هناك تخطيط مسبق وادخار مال' },
-      { q: 'A: The phone is ringing. B: I ___ answer it.', o: ['will', 'am going to', 'am going', 'go to'], a: 0, e: '"will" = قرار لحظي (spontaneous decision). نستخدم will عندما نقرر شيئاً في نفس اللحظة' },
-      { q: 'Look at those dark clouds! It ___ rain.', o: ['is going to', 'will', 'rains', 'is raining'], a: 0, e: '"is going to" = توقع مبني على دليل واضح (الغيوم الداكنة). going to مع الأدلة المرئية' },
-      { q: 'She ___ be a doctor when she grows up. That\'s her dream.', o: ['is going to', 'will', 'goes to', 'was going to'], a: 0, e: '"is going to" = خطط وطموحات مستقبلية. going to تعبر عن نية مسبقة (حلمها أن تصبح طبيبة)' },
-      { q: 'I promise I ___ call you every day.', o: ['will', 'am going to', 'am going', 'go to'], a: 0, e: '"will" = وعود (promises). نستخدم will مع الوعود والعروض والقرارات الفورية' }
+      {
+        type: "choice",
+        topic: "الصيغة الأسية",
+        source: "1.PDF، صفحة 9",
+        q: "اكتب 6 × 6 × 6 بالصّيغة الأسية.",
+        options: ["6^2", "6^3", "3^6", "18"],
+        answer: 1,
+        steps: ["تكرر العدد 6 ثلاث مرات.", "إذن الأس هو 3.", "الصيغة الأسية هي 6^3."]
+      },
+      {
+        type: "text",
+        topic: "الصيغة القياسية",
+        source: "1.PDF، صفحة 9",
+        q: "أوجد قيمة 2^5.",
+        answers: ["32"],
+        steps: ["نكتب 2^5 على صورة ضرب متكرر: 2 × 2 × 2 × 2 × 2.", "نضرب بالتتابع: 2 × 2 = 4، ثم 4 × 2 = 8، ثم 8 × 2 = 16، ثم 16 × 2 = 32.", "إذن قيمة 2^5 تساوي 32."]
+      },
+      {
+        type: "choice",
+        topic: "الأعداد السالبة والأسس",
+        source: "1.PDF، صفحة 10",
+        q: "ما قيمة (-5)^2؟",
+        options: ["-25", "10", "25", "-10"],
+        answer: 2,
+        steps: ["الأس 2 يعني ضرب العدد في نفسه.", "(-5) × (-5) = 25 لأن حاصل ضرب سالبين موجب.", "إذن القيمة 25."]
+      },
+      {
+        type: "text",
+        topic: "الأس الصفري",
+        source: "1.PDF، صفحة 10",
+        q: "أوجد قيمة 13^0.",
+        answers: ["1"],
+        steps: ["قاعدة الأس الصفري في الكتاب: أي عدد غير الصفر مرفوع للأس 0 يساوي 1.", "13 عدد غير صفري.", "إذن 13^0 = 1."]
+      },
+      {
+        type: "choice",
+        topic: "تطبيق على القوى",
+        source: "1.PDF، صفحة 11",
+        q: "في مثال الكائنات الدقيقة: ما قيمة 2^6؟",
+        options: ["12", "32", "64", "128"],
+        answer: 2,
+        steps: ["نكرر ضرب 2 ست مرات: 2 × 2 × 2 × 2 × 2 × 2.", "الناتج بالتدرج: 4، 8، 16، 32، 64.", "إذن 2^6 = 64."]
+      },
+      {
+        type: "text",
+        topic: "العوامل الأولية",
+        source: "1.PDF، صفحة 11",
+        q: "أكمل تحليل 180 باستعمال الأسس: 180 = 5 × 3^2 × 2^؟",
+        answers: ["2"],
+        steps: ["تحليل 180 في الكتاب: 180 = 5 × 3 × 2 × 2 × 3.", "نجمع العوامل المتشابهة: 3 × 3 = 3^2، و2 × 2 = 2^2.", "إذن الأس المفقود فوق 2 هو 2."]
+      },
+      {
+        type: "choice",
+        topic: "الجذر التربيعي",
+        source: "1.PDF، صفحة 15",
+        q: "ما قيمة √324؟",
+        options: ["16", "18", "21", "24"],
+        answer: 1,
+        steps: ["نبحث عن العدد الذي إذا ضرب في نفسه أعطى 324.", "18 × 18 = 324.", "إذن √324 = 18."]
+      },
+      {
+        type: "text",
+        topic: "الجذر التكعيبي",
+        source: "1.PDF، صفحة 16",
+        q: "أوجد قيمة ∛1728.",
+        answers: ["12"],
+        steps: ["الجذر التكعيبي هو العدد الذي إذا ضرب في نفسه ثلاث مرات أعطى العدد.", "12 × 12 × 12 = 1728.", "إذن ∛1728 = 12."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة المربع والجذر",
+        source: "1.PDF، صفحة 17",
+        q: "لوحة مربعة مساحتها 2304 cm². ما طول ضلعها؟",
+        options: ["24 cm", "36 cm", "48 cm", "64 cm"],
+        answer: 2,
+        steps: ["طول ضلع المربع يساوي الجذر التربيعي للمساحة.", "√2304 = 48.", "إذن طول الضلع 48 cm."]
+      },
+      {
+        type: "text",
+        topic: "العبارات العددية",
+        source: "1.PDF، صفحة 22",
+        q: "أوجد قيمة العبارة: 4^2 + 2^2 + 3.",
+        answers: ["23"],
+        steps: ["نحسب القوى أولًا: 4^2 = 16 و2^2 = 4.", "تصبح العبارة 16 + 4 + 3.", "الناتج 23."]
+      },
+      {
+        type: "choice",
+        topic: "المقادير الجبرية",
+        source: "1.PDF، صفحة 28",
+        q: "تكلفة الاشتراك في نادي الكراتيه هي 10 + 50m. ما التكلفة عند m = 3؟",
+        options: ["60 JD", "150 JD", "160 JD", "180 JD"],
+        answer: 2,
+        steps: ["نعوض m = 3 في المقدار 10 + 50m.", "10 + 50 × 3 = 10 + 150.", "إذن التكلفة 160 JD."]
+      },
+      {
+        type: "text",
+        topic: "حل المعادلات",
+        source: "1.PDF، صفحة 33",
+        q: "حل المعادلة y + 5 = 18. اكتب قيمة y فقط.",
+        answers: ["13"],
+        steps: ["نطرح 5 من طرفي المعادلة.", "y + 5 - 5 = 18 - 5.", "إذن y = 13."]
+      },
+      {
+        type: "choice",
+        topic: "حل المعادلات",
+        source: "1.PDF، صفحة 34",
+        q: "حل المعادلة 3x = 12.",
+        options: ["x = 3", "x = 4", "x = 9", "x = 36"],
+        answer: 1,
+        steps: ["نقسم طرفي المعادلة على 3.", "3x ÷ 3 = 12 ÷ 3.", "إذن x = 4."]
+      },
+      {
+        type: "text",
+        topic: "معادلة من الحياة",
+        source: "1.PDF، صفحة 36",
+        q: "في معادلة محيط شاشة الساعة: 2w + 8 = 14. ما قيمة w؟",
+        answers: ["3"],
+        steps: ["نطرح 8 من الطرفين: 2w = 6.", "نقسم الطرفين على 2.", "إذن w = 3."]
+      },
+      {
+        type: "choice",
+        topic: "النسب المتكافئة",
+        source: "2.PDF، صفحة 53",
+        q: "أي نسبة تكافئ 4 : 6؟",
+        options: ["2 : 3", "3 : 2", "8 : 10", "4 : 3"],
+        answer: 0,
+        steps: ["نقسم طرفي النسبة 4 : 6 على العدد نفسه وهو 2.", "4 ÷ 2 = 2 و6 ÷ 2 = 3.", "إذن 2 : 3 تكافئ 4 : 6."]
+      },
+      {
+        type: "text",
+        topic: "النسب المتكافئة",
+        source: "2.PDF، صفحة 54",
+        q: "أكمل النسبة المكافئة: 3 : 8 = 15 : ؟",
+        answers: ["40"],
+        steps: ["انتقلنا من 3 إلى 15 بالضرب في 5.", "نضرب الطرف الآخر في العدد نفسه: 8 × 5 = 40.", "إذن العدد المفقود 40."]
+      },
+      {
+        type: "choice",
+        topic: "جدول النسبة",
+        source: "2.PDF، صفحة 56",
+        q: "لعمل 10 فطائر يلزم 4 kg من الدقيق. كم يلزم لعمل 15 فطيرة؟",
+        options: ["5 kg", "6 kg", "8 kg", "10 kg"],
+        answer: 1,
+        steps: ["نقسم 10 فطائر و4 kg على 2 فنحصل على 5 فطائر و2 kg.", "نضرب في 3 للوصول إلى 15 فطيرة.", "2 × 3 = 6 kg."]
+      },
+      {
+        type: "text",
+        topic: "نسبة من الحياة",
+        source: "2.PDF، صفحة 56",
+        q: "طبق حلاوة جبن كتلته 200 g يحتوي 14 g من السكر. كم g سكر في 300 g من الطبق؟",
+        answers: ["21", "21g", "21 g"],
+        steps: ["نسبة الكتلة زادت من 200 إلى 300 بالضرب في 1.5.", "نضرب السكر في العامل نفسه: 14 × 1.5 = 21.", "إذن كتلة السكر 21 g."]
+      },
+      {
+        type: "choice",
+        topic: "النسب في الألوان",
+        source: "2.PDF، صفحة 57",
+        q: "النسبة بين الأزرق والأحمر 3 : 5. إذا كان الأحمر 45 قطرة، فكم قطرة زرقاء نحتاج؟",
+        options: ["15", "27", "45", "75"],
+        answer: 1,
+        steps: ["الأحمر يمثل 5 أجزاء، و45 ÷ 5 = 9.", "الأزرق يمثل 3 أجزاء.", "3 × 9 = 27 قطرة."]
+      },
+      {
+        type: "text",
+        topic: "جداول النسب",
+        source: "2.PDF، صفحة 57",
+        q: "محل عصير يضع 12 مكعب سكر في 600 mL. كم مكعبًا في 250 mL؟",
+        answers: ["5"],
+        steps: ["لكل 600 mL يوجد 12 مكعبًا.", "عدد المكعبات لكل 50 mL هو 1 لأن 600 ÷ 12 = 50.", "250 ÷ 50 = 5 مكعبات."]
+      },
+      {
+        type: "choice",
+        topic: "النسبة المئوية",
+        source: "2.PDF، صفحة 67",
+        q: "أي خصم أكبر: 3/25 من السعر أم 14% من السعر؟",
+        options: ["3/25 أكبر", "14% أكبر", "متساويان", "لا يمكن المقارنة"],
+        answer: 1,
+        steps: ["نحول 3/25 إلى نسبة مئوية.", "3/25 = 12/100 = 12%.", "14% أكبر من 12%، إذن 14% هو الخصم الأكبر."]
+      },
+      {
+        type: "text",
+        topic: "الأشكال الرباعية",
+        source: "3.PDF، صفحة 83",
+        q: "في شكل رباعي زواياه 70° و80° و90° وx°. أوجد x.",
+        answers: ["120", "120°"],
+        steps: ["مجموع زوايا الشكل الرباعي 360°.", "x + 70 + 80 + 90 = 360.", "x + 240 = 360، إذن x = 120°."]
+      },
+      {
+        type: "choice",
+        topic: "زوايا على مستقيم",
+        source: "3.PDF، صفحة 83",
+        q: "إذا كانت زاويتان على مستقيم ومجموعهما 180°، وإحداهما 100°، فما قياس الأخرى؟",
+        options: ["60°", "70°", "80°", "100°"],
+        answer: 2,
+        steps: ["مجموع قياسات الزوايا على مستقيم يساوي 180°.", "الزاوية المجهولة = 180 - 100.", "إذن قياسها 80°."]
+      },
+      {
+        type: "text",
+        topic: "زوايا الأشكال الرباعية",
+        source: "3.PDF، صفحة 84",
+        q: "إذا كان a + 130 = 180 في مثال الشكل الرباعي، فما قيمة a؟",
+        answers: ["50", "50°"],
+        steps: ["نطرح 130 من طرفي المعادلة.", "a = 180 - 130.", "إذن a = 50°."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة متوازي الأضلاع",
+        source: "3.PDF، صفحة 88",
+        q: "ما مساحة متوازي أضلاع قاعدته 14 cm وارتفاعه 5 cm؟",
+        options: ["19 cm²", "28 cm²", "70 cm²", "140 cm²"],
+        answer: 2,
+        steps: ["قانون مساحة متوازي الأضلاع: A = b × h.", "نعوض: A = 14 × 5.", "إذن المساحة 70 cm²."]
+      },
+      {
+        type: "text",
+        topic: "متوازي الأضلاع من الحياة",
+        source: "3.PDF، صفحة 91",
+        q: "ساحة اصطفاف على شكل متوازي أضلاع مساحتها 110 m² وارتفاعها 5.5 m. ما طول القاعدة؟",
+        answers: ["20", "20m", "20 m"],
+        steps: ["نستخدم A = b × h.", "110 = b × 5.5.", "b = 110 ÷ 5.5 = 20 m."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة المثلث",
+        source: "3.PDF، صفحة 96",
+        q: "ما مساحة مثلث قاعدته 20 cm وارتفاعه 10 cm؟",
+        options: ["50 cm²", "100 cm²", "200 cm²", "300 cm²"],
+        answer: 1,
+        steps: ["قانون مساحة المثلث: A = 1/2 × b × h.", "A = 1/2 × 20 × 10.", "إذن المساحة 100 cm²."]
+      },
+      {
+        type: "text",
+        topic: "المجهول في المثلث",
+        source: "3.PDF، صفحة 97",
+        q: "مثلث مساحته 28 m² وارتفاعه 8 m. أوجد طول القاعدة b.",
+        answers: ["7", "7m", "7 m"],
+        steps: ["نستخدم A = 1/2 × b × h.", "28 = 1/2 × b × 8، أي 28 = 4b.", "b = 28 ÷ 4 = 7 m."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة شبه المنحرف",
+        source: "3.PDF، صفحة 102",
+        q: "ما مساحة شبه منحرف قاعدتاه 4 cm و9 cm وارتفاعه 5 cm؟",
+        options: ["13 cm²", "22.5 cm²", "32.5 cm²", "65 cm²"],
+        answer: 2,
+        steps: ["قانون مساحة شبه المنحرف: A = 1/2 × (b1 + b2) × h.", "A = 1/2 × (4 + 9) × 5 = 1/2 × 13 × 5.", "إذن المساحة 32.5 cm²."]
+      },
+      {
+        type: "text",
+        topic: "شبه المنحرف من الحياة",
+        source: "3.PDF، صفحة 103",
+        q: "أشعة الشمس كونت شبه منحرف قاعدتاه 60 cm و40 cm وارتفاعه 30 cm. أوجد المساحة.",
+        answers: ["1500", "1500cm2", "1500 cm2", "1500cm²", "1500 cm²"],
+        steps: ["نستخدم A = 1/2 × (b1 + b2) × h.", "A = 1/2 × (60 + 40) × 30.", "A = 1/2 × 100 × 30 = 1500 cm²."]
+      },
+      {
+        type: "text",
+        topic: "زوايا الأشكال الرباعية",
+        source: "3.PDF، صفحة 83",
+        q: "في شكل رباعي زواياه 35° و120° و40° وx°. أوجد x.",
+        answers: ["165", "165°"],
+        steps: ["مجموع زوايا الشكل الرباعي يساوي 360°.", "x + 35 + 120 + 40 = 360.", "x + 195 = 360، إذن x = 165°."]
+      },
+      {
+        type: "choice",
+        topic: "زوايا الأشكال الرباعية",
+        source: "3.PDF، صفحة 84",
+        q: "في شكل رباعي زواياه 80° و150° و60° وx°. ما قيمة x؟",
+        options: ["60°", "70°", "80°", "90°"],
+        answer: 1,
+        steps: ["مجموع زوايا الشكل الرباعي 360°.", "80 + 150 + 60 = 290.", "x = 360 - 290 = 70°."]
+      },
+      {
+        type: "text",
+        topic: "زوايا على مستقيم",
+        source: "3.PDF، صفحة 84",
+        q: "إذا كانت الزاوية a مكملة لزاوية 130° على مستقيم، فما قيمة a؟",
+        answers: ["50", "50°"],
+        steps: ["مجموع الزوايا على مستقيم يساوي 180°.", "a + 130 = 180.", "a = 180 - 130 = 50°."]
+      },
+      {
+        type: "choice",
+        topic: "زوايا حول نقطة",
+        source: "3.PDF، صفحة 86",
+        q: "مجموع قياسات الزوايا حول نقطة يساوي:",
+        options: ["90°", "180°", "270°", "360°"],
+        answer: 3,
+        steps: ["يذكر الكتاب أن مجموع قياسات الزوايا حول نقطة يساوي 360°.", "هذه القاعدة تستخدم عند اجتماع عدة زوايا حول نقطة واحدة.", "إذن الإجابة الصحيحة 360°."]
+      },
+      {
+        type: "text",
+        topic: "زاوية حول نقطة",
+        source: "3.PDF، صفحة 86",
+        q: "حول نقطة واحدة توجد زوايا 135° و85° و35° و70° وx°. أوجد x.",
+        answers: ["35", "35°"],
+        steps: ["مجموع الزوايا حول نقطة يساوي 360°.", "135 + 85 + 35 + 70 = 325.", "x = 360 - 325 = 35°."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة متوازي الأضلاع",
+        source: "3.PDF، صفحة 88",
+        q: "ما مساحة متوازي أضلاع قاعدته 30 cm وارتفاعه 20 cm؟",
+        options: ["50 cm²", "100 cm²", "300 cm²", "600 cm²"],
+        answer: 3,
+        steps: ["قانون مساحة متوازي الأضلاع: A = b × h.", "A = 30 × 20.", "إذن المساحة 600 cm²."]
+      },
+      {
+        type: "text",
+        topic: "مساحة متوازي الأضلاع",
+        source: "3.PDF، صفحة 88",
+        q: "أوجد مساحة متوازي أضلاع قاعدته 9 m وارتفاعه 4 m.",
+        answers: ["36", "36m2", "36 m2", "36m²", "36 m²"],
+        steps: ["نستخدم A = b × h.", "A = 9 × 4.", "إذن المساحة 36 m²."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة متوازي الأضلاع",
+        source: "3.PDF، صفحة 88",
+        q: "أوجد مساحة متوازي أضلاع قاعدته 3 m وارتفاعه 12 m.",
+        options: ["15 m²", "24 m²", "36 m²", "48 m²"],
+        answer: 2,
+        steps: ["مساحة متوازي الأضلاع هي حاصل ضرب القاعدة في الارتفاع.", "A = 3 × 12.", "إذن المساحة 36 m²."]
+      },
+      {
+        type: "text",
+        topic: "متوازي الأضلاع على شبكة",
+        source: "3.PDF، صفحة 89",
+        q: "على شبكة مربعات: قاعدة متوازي الأضلاع 3 وحدات وارتفاعه 4 وحدات. أوجد المساحة.",
+        answers: ["12", "12وحدة", "12 وحدة", "12وحدةمربعة", "12 وحدة مربعة"],
+        steps: ["نعد القاعدة فنجدها 3 وحدات، ونعد الارتفاع فنجد 4 وحدات.", "A = b × h = 3 × 4.", "إذن المساحة 12 وحدة مربعة."]
+      },
+      {
+        type: "choice",
+        topic: "شكل مركب",
+        source: "3.PDF، صفحة 90",
+        q: "منطقة مظللة تتكون من مربع ضلعه 4 cm ومتوازي أضلاع قاعدته 4 cm وارتفاعه 2 cm. ما مساحتها؟",
+        options: ["8 cm²", "16 cm²", "24 cm²", "32 cm²"],
+        answer: 2,
+        steps: ["مساحة متوازي الأضلاع = 4 × 2 = 8 cm².", "مساحة المربع = 4 × 4 = 16 cm².", "المساحة الكلية = 8 + 16 = 24 cm²."]
+      },
+      {
+        type: "text",
+        topic: "شكل مركب",
+        source: "3.PDF، صفحة 90",
+        q: "متوازي أضلاع مساحته 360 cm² أزيل منه مستطيل مساحته 60 cm². ما مساحة المنطقة المتبقية؟",
+        answers: ["300", "300cm2", "300 cm2", "300cm²", "300 cm²"],
+        steps: ["المساحة المتبقية تساوي مساحة الشكل الكبير ناقص مساحة الجزء المزال.", "A = 360 - 60.", "إذن المساحة المتبقية 300 cm²."]
+      },
+      {
+        type: "text",
+        topic: "ارتفاع متوازي الأضلاع",
+        source: "3.PDF، صفحة 91",
+        q: "مزرعة على شكل متوازي أضلاع مساحتها 0.24 km² وطول قاعدتها 0.8 km. أوجد الارتفاع.",
+        answers: ["0.3", "0.3km", "0.3 km"],
+        steps: ["نستخدم A = b × h.", "0.24 = 0.8 × h.", "h = 0.24 ÷ 0.8 = 0.3 km."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة متوازي الأضلاع",
+        source: "3.PDF، صفحة 92",
+        q: "شريط على شكل متوازي أضلاع قاعدته 20 cm وارتفاعه 8 cm. ما مساحته؟",
+        options: ["28 cm²", "80 cm²", "160 cm²", "200 cm²"],
+        answer: 2,
+        steps: ["نستخدم قانون متوازي الأضلاع A = b × h.", "A = 20 × 8.", "إذن المساحة 160 cm²."]
+      },
+      {
+        type: "text",
+        topic: "مساحة اللوح الزجاجي",
+        source: "3.PDF، صفحة 93",
+        q: "لوح زجاج على شكل متوازي أضلاع طول قاعدته 40 cm وارتفاعه 70 cm. أوجد مساحته.",
+        answers: ["2800", "2800cm2", "2800 cm2", "2800cm²", "2800 cm²"],
+        steps: ["قانون المساحة: A = b × h.", "A = 40 × 70.", "إذن مساحة اللوح 2800 cm²."]
+      },
+      {
+        type: "choice",
+        topic: "اكتشاف الخطأ",
+        source: "3.PDF، صفحة 93",
+        q: "في متوازي أضلاع طول أحد أضلاعه 2 cm وارتفاعه 1.8 cm، استخدم مصطفى 2 كقاعدة رغم أن القاعدة المناسبة في الشكل 3 cm. ما التصحيح؟",
+        options: ["A = 2 × 1.8 = 3.6 cm²", "A = 3 × 1.8 = 5.4 cm²", "A = 3 + 1.8 = 4.8 cm²", "A = 2 × 3 = 6 cm²"],
+        answer: 1,
+        steps: ["الارتفاع يجب أن يكون عموديًا على القاعدة المختارة.", "في الشكل الارتفاع 1.8 cm يقابل القاعدة 3 cm.", "إذن التصحيح: A = 3 × 1.8 = 5.4 cm²."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة المثلث",
+        source: "3.PDF، صفحة 95",
+        q: "ما مساحة مثلث قاعدته 18 m وارتفاعه 12 m؟",
+        options: ["30 m²", "54 m²", "108 m²", "216 m²"],
+        answer: 2,
+        steps: ["قانون مساحة المثلث: A = 1/2 × b × h.", "A = 1/2 × 18 × 12.", "إذن المساحة 108 m²."]
+      },
+      {
+        type: "text",
+        topic: "مساحة المثلث",
+        source: "3.PDF، صفحة 96",
+        q: "أوجد مساحة مثلث قاعدته 4 m وارتفاعه 3 m.",
+        answers: ["6", "6m2", "6 m2", "6m²", "6 m²"],
+        steps: ["نستخدم A = 1/2 × b × h.", "A = 1/2 × 4 × 3.", "إذن المساحة 6 m²."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة المثلث",
+        source: "3.PDF، صفحة 96",
+        q: "أوجد مساحة مثلث قاعدته 6.5 m وارتفاعه 2 m.",
+        options: ["6.5 m²", "8.5 m²", "13 m²", "26 m²"],
+        answer: 0,
+        steps: ["نستخدم قانون مساحة المثلث.", "A = 1/2 × 6.5 × 2.", "نصف 2 يساوي 1، إذن المساحة 6.5 m²."]
+      },
+      {
+        type: "text",
+        topic: "المثلث على شبكة",
+        source: "3.PDF، صفحة 96",
+        q: "على شبكة مربعات: قاعدة المثلث 7 وحدات وارتفاعه 4 وحدات. أوجد المساحة.",
+        answers: ["14", "14وحدة", "14 وحدة", "14وحدةمربعة", "14 وحدة مربعة"],
+        steps: ["نستخدم A = 1/2 × b × h.", "A = 1/2 × 7 × 4.", "إذن المساحة 14 وحدة مربعة."]
+      },
+      {
+        type: "text",
+        topic: "مساحة مثلث من الحياة",
+        source: "3.PDF، صفحة 99",
+        q: "طائرة ورقية مثلثة قاعدتها 30 cm وارتفاعها 20 cm. أوجد مساحتها.",
+        answers: ["300", "300cm2", "300 cm2", "300cm²", "300 cm²"],
+        steps: ["نستخدم A = 1/2 × b × h.", "A = 1/2 × 30 × 20.", "إذن مساحة الطائرة الورقية 300 cm²."]
+      },
+      {
+        type: "choice",
+        topic: "اكتشاف الخطأ في المثلث",
+        source: "3.PDF، صفحة 100",
+        q: "أوجدت سلمى مساحة مثلث باستعمال الضلع 13 m بدل الارتفاع 12 m مع قاعدة 10 m. ما المساحة الصحيحة؟",
+        options: ["60 m²", "65 m²", "78 m²", "130 m²"],
+        answer: 0,
+        steps: ["في مساحة المثلث يجب استعمال الارتفاع العمودي لا أي ضلع.", "القاعدة 10 m والارتفاع الصحيح 12 m.", "A = 1/2 × 10 × 12 = 60 m²."]
+      },
+      {
+        type: "text",
+        topic: "نافذة مثلثة",
+        source: "3.PDF، صفحة 100",
+        q: "نافذة مثلثة طول قاعدتها 120 cm وارتفاعها 60 cm. أوجد مساحة الزجاج اللازم.",
+        answers: ["3600", "3600cm2", "3600 cm2", "3600cm²", "3600 cm²"],
+        steps: ["نستخدم قانون مساحة المثلث.", "A = 1/2 × 120 × 60.", "إذن المساحة 3600 cm²."]
+      },
+      {
+        type: "choice",
+        topic: "مساحة شبه المنحرف",
+        source: "3.PDF، صفحة 102",
+        q: "شبه منحرف قاعدتاه 5 m و12 m وارتفاعه 9 m. ما مساحته؟",
+        options: ["76.5 m²", "85 m²", "108 m²", "153 m²"],
+        answer: 0,
+        steps: ["قانون مساحة شبه المنحرف: A = 1/2 × (b1 + b2) × h.", "A = 1/2 × (5 + 12) × 9.", "A = 1/2 × 17 × 9 = 76.5 m²."]
+      },
+      {
+        type: "text",
+        topic: "مساحة شبه المنحرف",
+        source: "3.PDF، صفحة 102",
+        q: "شبه منحرف قاعدتاه 8.5 cm و11.5 cm وارتفاعه 8 cm. أوجد مساحته.",
+        answers: ["80", "80cm2", "80 cm2", "80cm²", "80 cm²"],
+        steps: ["نجمع القاعدتين: 8.5 + 11.5 = 20.", "A = 1/2 × 20 × 8.", "إذن المساحة 80 cm²."]
+      },
+      {
+        type: "choice",
+        topic: "شبه المنحرف على شبكة",
+        source: "3.PDF، صفحة 103",
+        q: "على شبكة: b1 = 3 وb2 = 1 وh = 4. ما مساحة شبه المنحرف؟",
+        options: ["4 وحدات مربعة", "6 وحدات مربعة", "8 وحدات مربعة", "16 وحدة مربعة"],
+        answer: 2,
+        steps: ["نستخدم A = 1/2 × (b1 + b2) × h.", "A = 1/2 × (3 + 1) × 4.", "إذن المساحة 8 وحدات مربعة."]
+      },
+      {
+        type: "text",
+        topic: "حديقة شبه منحرف",
+        source: "3.PDF، صفحة 104",
+        q: "حديقة على شكل شبه منحرف قاعدتاه 30 m و40 m وارتفاعه 35 m. أوجد المساحة.",
+        answers: ["1225", "1225m2", "1225 m2", "1225m²", "1225 m²"],
+        steps: ["نستخدم قانون شبه المنحرف.", "A = 1/2 × (30 + 40) × 35.", "A = 1/2 × 70 × 35 = 1225 m²."]
+      },
+      {
+        type: "choice",
+        topic: "شكل مركب وشبه منحرف",
+        source: "3.PDF، صفحة 104",
+        q: "منطقة مظللة: مساحة شبه المنحرف 10.5 m² ومساحة المثلث المزال 2 m². ما المساحة المتبقية؟",
+        options: ["8.5 m²", "10.5 m²", "12.5 m²", "21 m²"],
+        answer: 0,
+        steps: ["المساحة المتبقية = مساحة شبه المنحرف - مساحة المثلث.", "A = 10.5 - 2.", "إذن المساحة المتبقية 8.5 m²."]
+      }
     ];
 
-    let currentQuestion = 0;
-    let correctAnswers = 0;
-    let wrongAnswers = 0;
-    let answered = false;
-    let deferredPrompt = null;
-
-    const elements = {
-      questionNumber: document.getElementById('questionNumber'),
-      questionText: document.getElementById('questionText'),
-      optionsContainer: document.getElementById('optionsContainer'),
-      feedback: document.getElementById('feedback'),
-      feedbackTitle: document.getElementById('feedbackTitle'),
-      feedbackText: document.getElementById('feedbackText'),
-      nextBtn: document.getElementById('nextBtn'),
-      restartBtn: document.getElementById('restartBtn'),
-      correctCount: document.getElementById('correctCount'),
-      wrongCount: document.getElementById('wrongCount'),
-      totalCount: document.getElementById('totalCount'),
-      progressFill: document.getElementById('progressFill'),
-      quizArea: document.getElementById('quizArea'),
-      resultCard: document.getElementById('resultCard'),
-      finalScore: document.getElementById('finalScore'),
-      finalCorrect: document.getElementById('finalCorrect'),
-      finalWrong: document.getElementById('finalWrong'),
-      playAgainBtn: document.getElementById('playAgainBtn'),
-      installBanner: document.getElementById('installBanner'),
-      installBtn: document.getElementById('installBtn'),
-      finalTotalLabel: document.getElementById('finalTotalLabel'),
-      welcomeCard: document.getElementById('welcomeCard'),
-      quizContent: document.getElementById('quizContent'),
-      startBtn: document.getElementById('startBtn')
+    const state = {
+      current: 0,
+      correct: 0,
+      wrong: 0,
+      answered: false,
+      order: [],
+      misses: [],
+      deferredPrompt: null
     };
 
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
+    const laws = {
+      square: {
+        title: "مساحة المربع",
+        shape: '<div class="shape square"><span>s</span></div>',
+        rule: "المربع له أربعة أضلاع متساوية. المساحة تساوي طول الضلع مضروبًا في نفسه.",
+        calc: "إذا كان s = 5 cm، فإن A = 5 × 5 = 25 cm²."
+      },
+      rectangle: {
+        title: "مساحة المستطيل",
+        shape: '<div class="shape rectangle"><span>l × w</span></div>',
+        rule: "المستطيل نحسبه بضرب الطول في العرض.",
+        calc: "إذا كان الطول 8 cm والعرض 3 cm، فإن A = 8 × 3 = 24 cm²."
+      },
+      triangle: {
+        title: "مساحة المثلث",
+        shape: '<div class="shape triangle"><span>1/2</span></div>',
+        rule: "المثلث نصف متوازي أضلاع له القاعدة والارتفاع نفسيهما، لذلك نأخذ نصف حاصل ضرب القاعدة في الارتفاع.",
+        calc: "إذا كانت القاعدة 10 cm والارتفاع 6 cm، فإن A = 1/2 × 10 × 6 = 30 cm²."
+      },
+      trapezoid: {
+        title: "مساحة شبه المنحرف",
+        shape: '<div class="shape trapezoid"><span>b1 + b2</span></div>',
+        rule: "نجمع القاعدتين المتوازيتين، ثم نضرب في الارتفاع، ثم نأخذ النصف.",
+        calc: "إذا كانت القاعدتان 12 cm و8 cm والارتفاع 5 cm، فإن A = 1/2 × (12 + 8) × 5 = 50 cm²."
+      },
+      parallelogram: {
+        title: "مساحة متوازي الأضلاع",
+        shape: '<div class="shape parallelogram"><span>b × h</span></div>',
+        rule: "نختار القاعدة، ثم نضربها في الارتفاع العمودي عليها، وليس في الضلع المائل.",
+        calc: "إذا كانت القاعدة 9 m والارتفاع 4 m، فإن A = 9 × 4 = 36 m²."
+      },
+      cube: {
+        title: "حجم المكعب والمساحة الجانبية والكلية",
+        shape: '<div class="shape cube"><span>s</span></div>',
+        rule: "المكعب كل أضلاعه متساوية. حجمه s^3، ومساحته الجانبية 4s^2، ومساحته الكلية 6s^2.",
+        calc: "إذا كان s = 3 cm: V = 3 × 3 × 3 = 27 cm³، وLA = 4 × 9 = 36 cm²، وSA = 6 × 9 = 54 cm²."
+      },
+      prism: {
+        title: "حجم المنشور الرباعي القائم ومساحته",
+        shape: '<div class="shape prism"><span>l × w × h</span></div>',
+        rule: "المنشور الرباعي القائم حجمه يساوي مساحة القاعدة في الارتفاع. المساحة الجانبية تساوي محيط القاعدة في الارتفاع.",
+        calc: "إذا كان l = 6 وw = 4 وh = 5: V = 6 × 4 × 5 = 120، وLA = 2(6 + 4) × 5 = 100، وSA = 2(6×4 + 6×5 + 4×5) = 148."
+      }
+    };
+
+    const el = {
+      intro: document.getElementById("intro"),
+      quiz: document.getElementById("quiz"),
+      result: document.getElementById("result"),
+      questionCard: document.getElementById("questionCard"),
+      startBtn: document.getElementById("startBtn"),
+      installBtn: document.getElementById("installBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      restartBtn: document.getElementById("restartBtn"),
+      againBtn: document.getElementById("againBtn"),
+      correctCount: document.getElementById("correctCount"),
+      wrongCount: document.getElementById("wrongCount"),
+      answeredCount: document.getElementById("answeredCount"),
+      totalCount: document.getElementById("totalCount"),
+      progressFill: document.getElementById("progressFill"),
+      questionNumber: document.getElementById("questionNumber"),
+      questionTopic: document.getElementById("questionTopic"),
+      questionText: document.getElementById("questionText"),
+      answerArea: document.getElementById("answerArea"),
+      feedback: document.getElementById("feedback"),
+      feedbackTitle: document.getElementById("feedbackTitle"),
+      steps: document.getElementById("steps"),
+      source: document.getElementById("source"),
+      lawGrid: document.getElementById("lawGrid"),
+      shapeWrap: document.getElementById("shapeWrap"),
+      lawTitle: document.getElementById("lawTitle"),
+      lawRule: document.getElementById("lawRule"),
+      lawCalc: document.getElementById("lawCalc"),
+      finalScore: document.getElementById("finalScore"),
+      finalText: document.getElementById("finalText"),
+      mistakes: document.getElementById("mistakes")
+    };
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+        [copy[i], copy[j]] = [copy[j], copy[i]];
       }
-      return arr;
+      return copy;
     }
 
-    let shuffledQuestions = shuffle([...questions]);
-
-    function loadQuestion() {
-      const q = shuffledQuestions[currentQuestion];
-      elements.questionNumber.textContent = `السؤال ${currentQuestion + 1} من ${shuffledQuestions.length}`;
-      elements.questionText.textContent = q.q;
-      elements.optionsContainer.innerHTML = '';
-      elements.feedback.classList.remove('show', 'correct', 'wrong');
-      elements.nextBtn.disabled = true;
-      answered = false;
-
-      q.o.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = opt;
-        btn.dataset.index = idx;
-        btn.addEventListener('click', () => selectOption(idx));
-        elements.optionsContainer.appendChild(btn);
-      });
-
-      elements.progressFill.style.width = `${((currentQuestion) / shuffledQuestions.length) * 100}%`;
+    function normalize(value) {
+      return String(value)
+        .trim()
+        .toLowerCase()
+        .replace(/[٫,]/g, ".")
+        .replace(/\s+/g, "")
+        .replace(/°/g, "")
+        .replace(/²/g, "2");
     }
 
-    function selectOption(idx) {
-      if (answered) return;
-      answered = true;
-      const q = shuffledQuestions[currentQuestion];
-      const options = elements.optionsContainer.querySelectorAll('.option');
-
-      options.forEach((btn, i) => {
-        btn.disabled = true;
-        if (i === q.a) btn.classList.add('correct');
-        if (i === idx && idx !== q.a) btn.classList.add('wrong');
-        if (i === idx) btn.classList.add('selected');
+    function renderLaw(key) {
+      const law = laws[key] || laws.square;
+      el.shapeWrap.innerHTML = law.shape;
+      el.lawTitle.textContent = law.title;
+      el.lawRule.textContent = law.rule;
+      el.lawCalc.textContent = law.calc;
+      el.lawGrid.querySelectorAll(".law-card").forEach((card) => {
+        card.classList.toggle("active", card.dataset.law === key);
       });
+    }
 
-      const isCorrect = idx === q.a;
-      if (isCorrect) {
-        correctAnswers++;
-        elements.feedback.className = 'feedback show correct';
-        elements.feedbackTitle.textContent = '✅ إجابة صحيحة!';
-      } else {
-        wrongAnswers++;
-        elements.feedback.className = 'feedback show wrong';
-        elements.feedbackTitle.textContent = '❌ إجابة خاطئة';
-      }
-      elements.feedbackText.textContent = q.e;
-      elements.nextBtn.disabled = false;
+    function startQuiz() {
+      state.current = 0;
+      state.correct = 0;
+      state.wrong = 0;
+      state.answered = false;
+      state.misses = [];
+      state.order = shuffle(questions);
+      el.intro.style.display = "none";
+      el.quiz.classList.add("show");
+      el.questionCard.style.display = "block";
+      el.result.classList.remove("show");
       updateStats();
+      renderQuestion();
     }
 
     function updateStats() {
-      elements.correctCount.textContent = correctAnswers;
-      elements.wrongCount.textContent = wrongAnswers;
-      elements.totalCount.textContent = correctAnswers + wrongAnswers;
+      el.correctCount.textContent = state.correct;
+      el.wrongCount.textContent = state.wrong;
+      el.answeredCount.textContent = state.correct + state.wrong;
+      el.totalCount.textContent = state.order.length || questions.length;
+      const pct = state.order.length ? ((state.current) / state.order.length) * 100 : 0;
+      el.progressFill.style.width = `${pct}%`;
     }
 
-    function showResult() {
-      elements.quizArea.classList.add('hidden');
-      elements.resultCard.classList.add('show');
-      const pct = Math.round((correctAnswers / shuffledQuestions.length) * 100);
-      elements.finalScore.textContent = pct + '%';
-      elements.finalTotalLabel.textContent = `من ${shuffledQuestions.length} سؤال`;
-      elements.finalCorrect.textContent = correctAnswers;
-      elements.finalWrong.textContent = wrongAnswers;
-      elements.progressFill.style.width = '100%';
+    function renderQuestion() {
+      const q = state.order[state.current];
+      state.answered = false;
+      el.nextBtn.disabled = true;
+      el.feedback.className = "feedback";
+      el.steps.innerHTML = "";
+      el.source.textContent = "";
+      el.questionNumber.textContent = `السؤال ${state.current + 1} من ${state.order.length}`;
+      el.questionTopic.textContent = q.topic;
+      el.questionText.textContent = q.q;
+      el.answerArea.innerHTML = "";
+
+      if (q.type === "choice") {
+        const wrap = document.createElement("div");
+        wrap.className = "options";
+        q.options.forEach((option, index) => {
+          const btn = document.createElement("button");
+          btn.className = "option";
+          btn.textContent = option;
+          btn.addEventListener("click", () => gradeChoice(index));
+          wrap.appendChild(btn);
+        });
+        el.answerArea.appendChild(wrap);
+      } else {
+        const row = document.createElement("div");
+        row.className = "answer-row";
+        const input = document.createElement("input");
+        input.className = "answer-input";
+        input.id = "textAnswer";
+        input.inputMode = "decimal";
+        input.autocomplete = "off";
+        input.placeholder = "اكتب الإجابة";
+        const btn = document.createElement("button");
+        btn.className = "btn primary";
+        btn.textContent = "تحقق";
+        btn.addEventListener("click", gradeText);
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") gradeText();
+        });
+        row.append(input, btn);
+        el.answerArea.appendChild(row);
+        setTimeout(() => input.focus(), 80);
+      }
+      updateStats();
+    }
+
+    function showFeedback(isCorrect, q) {
+      el.feedback.className = `feedback show ${isCorrect ? "correct" : "wrong"}`;
+      el.feedbackTitle.textContent = isCorrect ? "إجابة صحيحة" : "إجابة غير صحيحة";
+      el.steps.innerHTML = "";
+      q.steps.forEach((step) => {
+        const li = document.createElement("li");
+        li.textContent = step;
+        el.steps.appendChild(li);
+      });
+      el.source.textContent = "شرح من الدروس";
+      el.nextBtn.disabled = false;
+      updateStats();
+    }
+
+    function recordAnswer(isCorrect, q, userAnswer) {
+      if (state.answered) return false;
+      state.answered = true;
+      if (isCorrect) {
+        state.correct++;
+      } else {
+        state.wrong++;
+        state.misses.push({
+          q: q.q,
+          userAnswer,
+          correct: q.type === "choice" ? q.options[q.answer] : q.answers[0],
+          source: q.source
+        });
+      }
+      return true;
+    }
+
+    function gradeChoice(index) {
+      const q = state.order[state.current];
+      const buttons = el.answerArea.querySelectorAll(".option");
+      const isCorrect = index === q.answer;
+      if (!recordAnswer(isCorrect, q, q.options[index])) return;
+      buttons.forEach((button, i) => {
+        button.disabled = true;
+        if (i === q.answer) button.classList.add("correct");
+        if (i === index && !isCorrect) button.classList.add("wrong");
+      });
+      showFeedback(isCorrect, q);
+    }
+
+    function gradeText() {
+      const q = state.order[state.current];
+      const input = document.getElementById("textAnswer");
+      if (!input || !input.value.trim()) {
+        input?.focus();
+        return;
+      }
+      const user = input.value;
+      const normalized = normalize(user);
+      const isCorrect = q.answers.some((answer) => normalize(answer) === normalized);
+      if (!recordAnswer(isCorrect, q, user)) return;
+      input.disabled = true;
+      el.answerArea.querySelector(".btn").disabled = true;
+      input.style.borderColor = isCorrect ? "var(--green)" : "var(--red)";
+      showFeedback(isCorrect, q);
     }
 
     function nextQuestion() {
-      currentQuestion++;
-      if (currentQuestion >= shuffledQuestions.length) {
+      state.current++;
+      if (state.current >= state.order.length) {
         showResult();
       } else {
-        loadQuestion();
+        renderQuestion();
       }
     }
 
-    function restartQuiz() {
-      currentQuestion = 0;
-      correctAnswers = 0;
-      wrongAnswers = 0;
-      shuffledQuestions = shuffle([...questions]);
-      elements.quizArea.classList.remove('hidden');
-      elements.resultCard.classList.remove('show');
-      elements.quizContent.classList.remove('show');
-      elements.welcomeCard.classList.remove('hidden');
-      elements.nextBtn.disabled = true;
-      updateStats();
+    function showResult() {
+      el.questionCard.style.display = "none";
+      el.result.classList.add("show");
+      el.progressFill.style.width = "100%";
+      const pct = Math.round((state.correct / state.order.length) * 100);
+      el.finalScore.textContent = `${pct}%`;
+      el.finalText.textContent = `أجبت عن ${state.correct} من ${state.order.length} إجابة صحيحة.`;
+      el.mistakes.innerHTML = "";
+      if (state.misses.length === 0) {
+        const div = document.createElement("div");
+        div.className = "mistake";
+        div.textContent = "ممتاز، لا توجد أخطاء في هذا النموذج.";
+        el.mistakes.appendChild(div);
+      } else {
+        state.misses.slice(0, 8).forEach((miss) => {
+          const div = document.createElement("div");
+          div.className = "mistake";
+          div.textContent = `${miss.q} إجابتك: ${miss.userAnswer}. الصحيح: ${miss.correct}.`;
+          el.mistakes.appendChild(div);
+        });
+      }
     }
 
-    elements.startBtn.addEventListener('click', () => {
-      elements.welcomeCard.classList.add('hidden');
-      elements.quizContent.classList.add('show');
-      shuffledQuestions = shuffle([...questions]);
-      updateStats();
-      loadQuestion();
+    function backToIntro() {
+      el.quiz.classList.remove("show");
+      el.intro.style.display = "block";
+    }
+
+    el.startBtn.addEventListener("click", startQuiz);
+    el.againBtn.addEventListener("click", startQuiz);
+    el.nextBtn.addEventListener("click", nextQuestion);
+    el.restartBtn.addEventListener("click", backToIntro);
+    el.lawGrid.addEventListener("click", (event) => {
+      const card = event.target.closest(".law-card");
+      if (card) renderLaw(card.dataset.law);
+    });
+    renderLaw("square");
+
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      state.deferredPrompt = event;
+      el.installBtn.hidden = false;
     });
 
-    elements.nextBtn.addEventListener('click', nextQuestion);
-    elements.restartBtn.addEventListener('click', restartQuiz);
-    elements.playAgainBtn.addEventListener('click', restartQuiz);
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      elements.installBanner.classList.add('show');
+    el.installBtn.addEventListener("click", async () => {
+      if (!state.deferredPrompt) return;
+      state.deferredPrompt.prompt();
+      await state.deferredPrompt.userChoice;
+      state.deferredPrompt = null;
+      el.installBtn.hidden = true;
     });
-
-    elements.installBtn.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const result = await deferredPrompt.userChoice;
-        if (result.outcome === 'accepted') {
-          elements.installBanner.classList.remove('show');
-        }
-        deferredPrompt = null;
-      }
-    });
-
-    window.addEventListener('appinstalled', () => {
-      elements.installBanner.classList.remove('show');
-    });
-
   </script>
 </body>
 </html>
